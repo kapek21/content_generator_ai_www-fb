@@ -1,0 +1,135 @@
+=== AI Content Publisher - Instrukcja Instalacji ===
+
+SZYBKA INSTALACJA (15 minut)
+========================================
+
+KROK 1: Instalacja wtyczki
+---------------------------
+Metoda A (Panel WordPress - ZALECANA):
+1. Spakuj folder 'ai-content-publisher' do ZIP
+2. W WordPress: Wtyczki → Dodaj nową → Wgraj wtyczkę
+3. Wybierz plik ZIP i kliknij Zainstaluj
+4. Kliknij Aktywuj wtyczkę
+
+Metoda B (FTP):
+1. Skopiuj folder 'ai-content-publisher' do /wp-content/plugins/
+2. W WordPress: Wtyczki → Znajdź "AI Content Publisher" → Aktywuj
+
+KROK 2: Uzyskaj klucze API
+---------------------------
+Perplexity API: ✅ WYMAGANE
+→ https://www.perplexity.ai/settings/api
+→ Wygeneruj klucz API (zaczyna się od 'pplx-')
+
+OpenAI API: ✅ WYMAGANE
+→ https://platform.openai.com/api-keys
+→ Dodaj płatność w Billing
+→ Wygeneruj klucz API (zaczyna się od 'sk-')
+
+Facebook API: 🔵 OPCJONALNE (możesz pominąć!)
+→ https://developers.facebook.com/tools/explorer/
+→ Wybierz swoją aplikację i stronę
+→ Dodaj uprawnienia: pages_manage_posts, pages_read_engagement
+→ Wygeneruj Access Token
+→ Znajdź ID strony: https://findmyfbid.com/
+→ Jeśli nie chcesz Facebooka, zostaw wyłączone w ustawieniach
+
+KROK 3: Konfiguracja
+---------------------
+1. W WordPress idź do: AI Publisher → Ustawienia
+2. Wklej klucze API:
+   - Klucz API Perplexity ✅ WYMAGANE
+   - Klucz API OpenAI ✅ WYMAGANE
+3. Facebook (OPCJONALNE):
+   - Zaznacz checkbox "Włącz publikację na Facebook" jeśli chcesz
+   - Jeśli zaznaczone, wklej ID Strony i Token
+   - Jeśli nie zaznaczone, artykuły będą tylko w WordPress
+4. Ustaw województwo (wykrywane automatycznie)
+5. Dodaj słowa kluczowe (opcjonalne)
+6. Kliknij "Zapisz Ustawienia"
+
+KROK 4: Test
+------------
+1. Idź do: AI Publisher → Panel Główny
+2. Kliknij "Testuj wszystkie połączenia"
+3. Sprawdź wyniki:
+   - Perplexity API: powinno być ✓ (zielone)
+   - OpenAI API: powinno być ✓ (zielone)
+   - Facebook API: ✓ (jeśli włączone) lub "Wyłączone" (jeśli nie)
+
+KROK 5: Ustaw częstotliwość (NOWOŚĆ v1.1.0)
+-------------------------------------------
+1. W AI Publisher → Panel Główny
+2. Dla każdej kategorii wybierz częstotliwość:
+   - Codziennie / Co 2 dni / Co 3 dni
+   - Raz w tygodniu / Raz na 2 tygodnie / Raz w miesiącu
+   - Wyłączone
+3. Ustawienie zapisuje się automatycznie
+
+KROK 6: Pierwszy artykuł!
+--------------------------
+1. W AI Publisher → Panel Główny
+2. Wybierz kategorię
+3. Kliknij "Generuj artykuł"
+4. Poczekaj 2-3 minuty
+5. Gotowe! 🎉
+
+WYMAGANIA
+=========
+- WordPress 5.8+
+- PHP 7.4+
+- MySQL 5.7+
+- Konta API: Perplexity, OpenAI, Facebook
+
+KOSZTY
+======
+Jeden artykuł: ~$0.20-0.35
+10 kategorii dziennie: ~$2.00-3.50/dzień
+Miesięcznie (10 kategorii × 30 dni): ~$60-105
+
+POMOC
+=====
+Pełna dokumentacja: README.md
+Szybki start: QUICKSTART.md
+Struktura projektu: STRUCTURE.md
+
+ROZWIĄZYWANIE PROBLEMÓW
+=======================
+Problem: Timeout podczas generowania
+Rozwiązanie: Zwiększ max_execution_time w PHP do 300 sekund
+
+Problem: Token Facebook wygasa
+Rozwiązanie: Odnawiaj token co 60 dni
+
+Problem: Brak środków OpenAI
+Rozwiązanie: Doładuj konto na platform.openai.com
+
+WSPARCIE
+========
+- Sprawdź logi: /wp-content/debug.log
+- Sprawdź historię w panelu wtyczki
+- Przeczytaj pełną dokumentację
+
+LICENCJA
+========
+GPL v2 lub nowsza
+
+WERSJA
+======
+1.1.0 (Październik 2025)
+
+NOWOŚCI w v1.1.0
+================
++ Konfigurowalna częstotliwość dla każdej kategorii
++ Wyświetlanie daty ostatniego generowania
++ Wyświetlanie przewidywanej następnej publikacji
++ Inteligentne sprawdzanie według częstotliwości
++ 🔵 OPCJONALNA publikacja na Facebook
+  - Możesz wyłączyć Facebook i publikować tylko w WordPress
+  - Brak wymogu konfiguracji FB jeśli opcja wyłączona
++ Zaktualizowane modele Perplexity API (sonar, sonar-pro)
+
+==========================================
+Miłego korzystania z AI Content Publisher!
+🚀 Automatyzacja treści na najwyższym poziomie!
+==========================================
