@@ -2,8 +2,8 @@
 /**
  * Plugin Name: AI Content Publisher
  * Plugin URI: https://twojadomena.pl
- * Description: Automatyczne generowanie i publikowanie artykułów wykorzystując Perplexity, OpenAI i Facebook Graph API z konfigurowalną częstotliwością dla każdej kategorii
- * Version: 1.1.0
+ * Description: Automatyczne generowanie i publikowanie artykułów wykorzystując Perplexity, OpenAI i Facebook Graph API z konfigurowalną częstotliwością dla każdej kategorii oraz wsparciem dla wielu języków (PL, DE, EN, UK)
+ * Version: 1.2.0
  * Author: Twoja Nazwa
  * Author URI: https://twojadomena.pl
  * License: GPL2
@@ -16,7 +16,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Definicje stałych
-define('AICP_VERSION', '1.1.0');
+define('AICP_VERSION', '1.2.0');
 define('AICP_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('AICP_PLUGIN_URL', plugin_dir_url(__FILE__));
 
@@ -158,6 +158,7 @@ class AI_Content_Publisher {
         register_setting('aicp_settings', 'aicp_auto_generate_time');
         register_setting('aicp_settings', 'aicp_article_length');
         register_setting('aicp_settings', 'aicp_province_name');
+        register_setting('aicp_settings', 'aicp_content_language');
     }
     
     public function render_admin_page() {
@@ -486,6 +487,44 @@ class AI_Content_Publisher {
             'monthly' => 'Raz w miesiącu',
             'disabled' => 'Wyłączone'
         );
+    }
+    
+    /**
+     * Pobiera dostępne języki
+     */
+    public static function get_available_languages() {
+        return array(
+            'pl' => 'Polski',
+            'de' => 'Deutsch (Niemiecki)',
+            'en' => 'English (Angielski)',
+            'uk' => 'Українська (Ukraiński)'
+        );
+    }
+    
+    /**
+     * Pobiera pełne nazwy języków dla API
+     */
+    public static function get_language_full_name($lang_code) {
+        $names = array(
+            'pl' => 'Polish',
+            'de' => 'German',
+            'en' => 'English',
+            'uk' => 'Ukrainian'
+        );
+        return isset($names[$lang_code]) ? $names[$lang_code] : 'Polish';
+    }
+    
+    /**
+     * Pobiera natywną nazwę języka
+     */
+    public static function get_language_native_name($lang_code) {
+        $names = array(
+            'pl' => 'polskim',
+            'de' => 'niemieckim',
+            'en' => 'angielskim',
+            'uk' => 'ukraińskim'
+        );
+        return isset($names[$lang_code]) ? $names[$lang_code] : 'polskim';
     }
 }
 

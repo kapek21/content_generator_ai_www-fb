@@ -19,6 +19,7 @@ if (isset($_POST['aicp_save_settings']) && check_admin_referer('aicp_settings_no
     update_option('aicp_auto_generate_time', sanitize_text_field($_POST['aicp_auto_generate_time']));
     update_option('aicp_article_length', intval($_POST['aicp_article_length']));
     update_option('aicp_province_name', sanitize_text_field($_POST['aicp_province_name']));
+    update_option('aicp_content_language', sanitize_text_field($_POST['aicp_content_language']));
     
     echo '<div class="notice notice-success"><p>Ustawienia zostały zapisane!</p></div>';
 }
@@ -34,6 +35,7 @@ $auto_enabled = get_option('aicp_auto_generate_enabled', '0');
 $auto_time = get_option('aicp_auto_generate_time', '08:00');
 $article_length = get_option('aicp_article_length', '1200');
 $province_name = get_option('aicp_province_name', AI_Content_Publisher::get_province_from_domain());
+$content_language = get_option('aicp_content_language', 'pl');
 ?>
 
 <div class="wrap aicp-settings">
@@ -178,7 +180,32 @@ $province_name = get_option('aicp_province_name', AI_Content_Publisher::get_prov
             <table class="form-table">
                 <tr>
                     <th scope="row">
-                        <label for="aicp_province_name">Nazwa Województwa</label>
+                        <label for="aicp_content_language">Język Treści</label>
+                    </th>
+                    <td>
+                        <select 
+                            id="aicp_content_language"
+                            name="aicp_content_language" 
+                            class="regular-text"
+                        >
+                            <?php 
+                            $languages = AI_Content_Publisher::get_available_languages();
+                            foreach ($languages as $code => $name): 
+                            ?>
+                                <option value="<?php echo esc_attr($code); ?>" <?php selected($content_language, $code); ?>>
+                                    <?php echo esc_html($name); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                        <p class="description">
+                            Wybierz język, w którym będą generowane artykuły
+                        </p>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th scope="row">
+                        <label for="aicp_province_name">Nazwa Województwa/Regionu</label>
                     </th>
                     <td>
                         <input 
@@ -189,7 +216,8 @@ $province_name = get_option('aicp_province_name', AI_Content_Publisher::get_prov
                             class="regular-text"
                         />
                         <p class="description">
-                            Nazwa województwa, którego dotyczy portal (wykryta automatycznie lub ustaw ręcznie)
+                            Nazwa województwa/regionu, którego dotyczy portal (wykryta automatycznie lub ustaw ręcznie).<br>
+                            Dla języka niemieckiego użyj np. "Bayern", "Nordrhein-Westfalen", dla angielskiego "California", "Texas" itp.
                         </p>
                     </td>
                 </tr>

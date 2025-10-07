@@ -5,6 +5,26 @@ Wszystkie istotne zmiany w projekcie AI Content Publisher będą dokumentowane w
 Format oparty na [Keep a Changelog](https://keepachangelog.com/pl/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/lang/pl/).
 
+## [1.2.0] - 2025-10-07
+
+### Dodane
+- **🌍 Wsparcie dla wielu języków (Multi-language support)**
+  - Obsługa 4 języków: Polski, Niemiecki, Angielski, Ukraiński
+  - Wybór języka treści w ustawieniach
+  - Wszystkie prompty AI dostosowane do wybranego języka:
+    - Perplexity API - wyszukiwanie newsów w wybranym języku
+    - OpenAI GPT-4o - generowanie artykułów w wybranym języku
+    - OpenAI GPT-4o-mini - generowanie postów Facebook w wybranym języku
+  - Automatyczne dostosowanie tonu i stylu do kultury językowej
+  - Wsparcie dla regionalnych nazw (województwo/Bundesland/state/регіон)
+  
+### Zmienione
+- Zaktualizowano wszystkie API calls o parametr języka
+- Rozszerzono system promptów o wielojęzyczne szablony
+- Dodano funkcje pomocnicze do mapowania języków w głównej klasie
+
+---
+
 ## [1.1.0] - 2025-10-04
 
 ### Dodane
@@ -91,7 +111,7 @@ projekt stosuje [Semantic Versioning](https://semver.org/lang/pl/).
 - [ ] Kolejka publikacji
 
 ### Do rozważenia w v2.0.0
-- [ ] Multi-language support
+- [x] Multi-language support (zrealizowane w v1.2.0)
 - [ ] Custom prompts przez interfejs
 - [ ] A/B testing tytułów
 - [ ] Analytics i reporting

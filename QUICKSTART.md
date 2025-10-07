@@ -94,23 +94,34 @@ Następnie w WordPress:
    Token Facebook: EAAxxxxxxxxxxxxxxxxx
    ```
 
-3. Ustaw województwo (automatycznie wykryte):
+3. **🌍 NOWOŚĆ v1.2.0:** Wybierz język treści:
    ```
-   Nazwa Województwa: mazowieckie
-   ```
-
-4. Dodaj słowa kluczowe (opcjonalne):
-   ```
-   samorząd, inwestycje, wydarzenia lokalne, kultura, sport, biznes
+   Język Treści: Polski 🇵🇱 / Deutsch 🇩🇪 / English 🇬🇧 / Українська 🇺🇦
    ```
 
-5. Włącz automatyzację (opcjonalne):
+4. Ustaw województwo/region (automatycznie wykryte):
+   ```
+   Polski: mazowieckie, śląskie, etc.
+   Niemiecki: Bayern, Nordrhein-Westfalen, etc.
+   Angielski: California, Texas, etc.
+   Ukraiński: Київська область, etc.
+   ```
+
+5. Dodaj słowa kluczowe (w wybranym języku):
+   ```
+   Polski: samorząd, inwestycje, wydarzenia lokalne, kultura, sport, biznes
+   Niemiecki: Gemeinde, Investitionen, lokale Veranstaltungen, Kultur, Sport
+   Angielski: local government, investments, local events, culture, sports
+   Ukraiński: самоврядування, інвестиції, місцеві події, культура, спорт
+   ```
+
+6. Włącz automatyzację (opcjonalne):
    ```
    ☑ Automatyczne Generowanie
    Godzina: 08:00
    ```
 
-6. Kliknij **Zapisz Ustawienia**
+7. Kliknij **Zapisz Ustawienia**
 
 ---
 
@@ -327,6 +338,9 @@ Miłego korzystania z AI Content Publisher! 🚀
 
 ---
 
-**Wersja:** 1.1.0  
+**Wersja:** 1.2.0  
 **Data:** Październik 2025  
-**Nowość:** Konfigurowalna częstotliwość dla każdej kategorii!
+**Nowości:**
+- 🌍 Wsparcie dla 4 języków: Polski, Niemiecki, Angielski, Ukraiński
+- Konfigurowalna częstotliwość dla każdej kategorii
+- Wszystkie prompty AI dostosowane do wybranego języka

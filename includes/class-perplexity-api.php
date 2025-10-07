@@ -47,20 +47,23 @@ class AICP_Perplexity_API {
     /**
      * Wyszukuje najnowsze newsy dla danej kategorii i województwa
      */
-    public function search_news($category_name, $province, $keywords = array()) {
+    public function search_news($category_name, $province, $keywords = array(), $language = 'pl') {
         if (empty($this->api_key)) {
             throw new Exception('Brak klucza API Perplexity');
         }
         
         // Przygotuj zapytanie
-        $query = $this->build_search_query($category_name, $province, $keywords);
+        $query = $this->build_search_query($category_name, $province, $keywords, $language);
+        
+        // Przygotuj system prompt w odpowiednim języku
+        $system_prompt = $this->get_system_prompt($language);
         
         $response = $this->make_request([
             'model' => 'sonar-pro', // ResearchModels: do szczegółowych analiz i raportów
             'messages' => [
                 [
                     'role' => 'system',
-                    'content' => 'Jesteś asystentem, który wyszukuje najnowsze informacje i newsy. Odpowiadaj po polsku.'
+                    'content' => $system_prompt
                 ],
                 [
                     'role' => 'user',
@@ -79,23 +82,65 @@ class AICP_Perplexity_API {
     }
     
     /**
+     * Pobiera system prompt w wybranym języku
+     */
+    private function get_system_prompt($language) {
+        $prompts = array(
+            'pl' => 'Jesteś asystentem, który wyszukuje najnowsze informacje i newsy. Odpowiadaj po polsku.',
+            'de' => 'Du bist ein Assistent, der die neuesten Informationen und Nachrichten sucht. Antworte auf Deutsch.',
+            'en' => 'You are an assistant that searches for the latest information and news. Respond in English.',
+            'uk' => 'Ти помічник, який шукає найновішу інформацію та новини. Відповідай українською.'
+        );
+        
+        return isset($prompts[$language]) ? $prompts[$language] : $prompts['pl'];
+    }
+    
+    /**
      * Buduje zapytanie wyszukiwania
      */
-    private function build_search_query($category_name, $province, $keywords) {
+    private function build_search_query($category_name, $province, $keywords, $language = 'pl') {
         $today = date('Y-m-d');
         $week_ago = date('Y-m-d', strtotime('-7 days'));
         
-        $query = "Wyszukaj najnowsze informacje, wydarzenia i newsy związane z tematyką: {$category_name}, ";
-        $query .= "które dotyczą województwa {$province} lub regionu {$province}. ";
-        $query .= "Skup się na wydarzeniach z ostatnich 7 dni (od {$week_ago} do {$today}). ";
+        // Szablony zapytań dla różnych języków
+        $templates = array(
+            'pl' => array(
+                'intro' => "Wyszukaj najnowsze informacje, wydarzenia i newsy związane z tematyką: {$category_name}, które dotyczą województwa {$province} lub regionu {$province}. ",
+                'timeframe' => "Skup się na wydarzeniach z ostatnich 7 dni (od {$week_ago} do {$today}). ",
+                'keywords' => "Uwzględnij następujące słowa kluczowe: %s. ",
+                'summary' => "Przedstaw co najmniej 5-7 najważniejszych aktualnych informacji z tego zakresu. Dla każdej informacji podaj konkretne fakty, daty i szczegóły."
+            ),
+            'de' => array(
+                'intro' => "Suche die neuesten Informationen, Ereignisse und Nachrichten zum Thema: {$category_name}, die das Bundesland {$province} oder die Region {$province} betreffen. ",
+                'timeframe' => "Konzentriere dich auf Ereignisse der letzten 7 Tage (vom {$week_ago} bis {$today}). ",
+                'keywords' => "Berücksichtige folgende Schlüsselwörter: %s. ",
+                'summary' => "Präsentiere mindestens 5-7 der wichtigsten aktuellen Informationen aus diesem Bereich. Gib für jede Information konkrete Fakten, Daten und Details an."
+            ),
+            'en' => array(
+                'intro' => "Search for the latest information, events and news related to: {$category_name}, concerning the state/region of {$province}. ",
+                'timeframe' => "Focus on events from the last 7 days (from {$week_ago} to {$today}). ",
+                'keywords' => "Consider the following keywords: %s. ",
+                'summary' => "Present at least 5-7 of the most important current information from this area. For each item, provide specific facts, dates and details."
+            ),
+            'uk' => array(
+                'intro' => "Знайди найновішу інформацію, події та новини, пов'язані з темою: {$category_name}, що стосуються регіону {$province}. ",
+                'timeframe' => "Зосередься на подіях останніх 7 днів (з {$week_ago} до {$today}). ",
+                'keywords' => "Враховуй наступні ключові слова: %s. ",
+                'summary' => "Представ принаймні 5-7 найважливіших актуальних інформацій з цієї сфери. Для кожної інформації надай конкретні факти, дати та деталі."
+            )
+        );
+        
+        $template = isset($templates[$language]) ? $templates[$language] : $templates['pl'];
+        
+        $query = $template['intro'];
+        $query .= $template['timeframe'];
         
         if (!empty($keywords)) {
             $keywords_str = implode(', ', $keywords);
-            $query .= "Uwzględnij następujące słowa kluczowe: {$keywords_str}. ";
+            $query .= sprintf($template['keywords'], $keywords_str);
         }
         
-        $query .= "Przedstaw co najmniej 5-7 najważniejszych aktualnych informacji z tego zakresu. ";
-        $query .= "Dla każdej informacji podaj konkretne fakty, daty i szczegóły.";
+        $query .= $template['summary'];
         
         return $query;
     }

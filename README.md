@@ -1,6 +1,6 @@
 # AI Content Publisher - Wtyczka WordPress
 
-🤖 Automatyczne generowanie i publikowanie artykułów wykorzystując sztuczną inteligencję (Perplexity, OpenAI) z integracją Facebook.
+🤖 Automatyczne generowanie i publikowanie artykułów wykorzystując sztuczną inteligencję (Perplexity, OpenAI) z integracją Facebook. Obsługa 4 języków: Polski 🇵🇱, Niemiecki 🇩🇪, Angielski 🇬🇧, Ukraiński 🇺🇦
 
 ## 📋 Spis treści
 
@@ -33,8 +33,9 @@ AI Content Publisher to zaawansowana wtyczka WordPress, która automatyzuje proc
 - ✅ **Inteligentne generowanie treści** - GPT-4 tworzy wysokiej jakości artykuły dziennikarskie
 - ✅ **Generowanie obrazów AI** - DALL-E 3 tworzy unikalne obrazy dla każdego artykułu
 - ✅ **Publikacja na Facebook** - automatyczne posty ze zdjęciami i linkami
+- 🌍 **Wsparcie wielu języków** - Polski, Niemiecki, Angielski, Ukraiński (wszystkie prompty AI dostosowane)
 - ✅ **Optymalizacja SEO** - naturalne zagęszczenie słów kluczowych
-- ✅ **Wykrywanie województwa** - automatyczne rozpoznawanie regionu z nazwy domeny
+- ✅ **Wykrywanie województwa/regionu** - automatyczne rozpoznawanie regionu z nazwy domeny
 - ✅ **Konfigurowana częstotliwość** - indywidualna częstotliwość publikacji dla każdej kategorii (codziennie, co 2 dni, co tydzień, etc.)
 - ✅ **Harmonogram automatyczny** - inteligentne generowanie według ustawionej częstotliwości
 - ✅ **Historia publikacji** - pełna historia z filtrami i statystykami
@@ -175,11 +176,32 @@ Wtyczka automatycznie:
 
 W WordPress: **AI Publisher → Ustawienia → Ustawienia Treści**
 
-- **Nazwa Województwa**: Wykrywana automatycznie z domeny (możesz zmienić)
+- **Język Treści**: Wybierz język, w którym będą generowane artykuły:
+  - 🇵🇱 **Polski** - artykuły po polsku dla polskich czytelników
+  - 🇩🇪 **Niemiecki** - artykuły auf Deutsch dla niemieckojęzycznych użytkowników
+  - 🇬🇧 **Angielski** - articles in English for international audience
+  - 🇺🇦 **Ukraiński** - статті українською для українських читачів
+  
+  **Wszystkie elementy dostosowane do języka:**
+  - Wyszukiwanie newsów przez Perplexity
+  - Generowanie artykułów przez GPT-4
+  - Generowanie postów Facebook
+  - Ton i styl zgodny z kulturą językową
+
+- **Nazwa Województwa/Regionu**: Wykrywana automatycznie z domeny (możesz zmienić)
+  - Dla polskiego: "mazowieckie", "śląskie", itp.
+  - Dla niemieckiego: "Bayern", "Nordrhein-Westfalen", itp.
+  - Dla angielskiego: "California", "Texas", itp.
+  - Dla ukraińskiego: "Київська область", "Львівська область", itp.
+
 - **Długość Artykułu**: Domyślnie 1200 słów (zakres: 500-3000)
-- **Słowa Kluczowe**: Lista słów kluczowych oddzielonych przecinkami, np.:
+
+- **Słowa Kluczowe**: Lista słów kluczowych oddzielonych przecinkami (w wybranym języku), np.:
   ```
-  samorząd, inwestycje, wydarzenia lokalne, kultura, sport
+  Polski: samorząd, inwestycje, wydarzenia lokalne, kultura, sport
+  Niemiecki: Gemeinde, Investitionen, lokale Veranstaltungen, Kultur, Sport
+  Angielski: local government, investments, local events, culture, sports
+  Ukraiński: самоврядування, інвестиції, місцеві події, культура, спорт
   ```
 
 ### 5. Częstotliwość publikacji dla kategorii

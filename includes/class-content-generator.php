@@ -14,12 +14,14 @@ class AICP_Content_Generator {
     private $facebook;
     private $province;
     private $keywords;
+    private $language;
     
     public function __construct() {
         $this->perplexity = new AICP_Perplexity_API();
         $this->openai = new AICP_OpenAI_API();
         $this->facebook = new AICP_Facebook_API();
         $this->province = AI_Content_Publisher::get_province_from_domain();
+        $this->language = get_option('aicp_content_language', 'pl');
         
         // Pobierz słowa kluczowe
         $keywords_string = get_option('aicp_keywords', '');
@@ -53,7 +55,8 @@ class AICP_Content_Generator {
         $news_data = $this->perplexity->search_news(
             $category->name,
             $this->province,
-            $this->keywords
+            $this->keywords,
+            $this->language
         );
         
         if (empty($news_data)) {
@@ -68,7 +71,8 @@ class AICP_Content_Generator {
             $category->name,
             $this->province,
             $this->keywords,
-            $article_length
+            $article_length,
+            $this->language
         );
         
         // Wyodrębnij tytuł z artykułu
@@ -104,7 +108,8 @@ class AICP_Content_Generator {
             $facebook_message = $this->openai->generate_facebook_post(
                 $article_title,
                 $article_excerpt,
-                $this->province
+                $this->province,
+                $this->language
             );
             
             // Krok 6: Opublikuj na Facebook
