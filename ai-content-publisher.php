@@ -2,8 +2,8 @@
 /**
  * Plugin Name: AI Content Publisher
  * Plugin URI: https://twojadomena.pl
- * Description: Automatyczne generowanie i publikowanie artykułów wykorzystując Perplexity, OpenAI i Facebook Graph API z konfigurowalną częstotliwością dla każdej kategorii oraz wsparciem dla wielu języków (PL, DE, EN, UK)
- * Version: 1.2.0
+ * Description: Automatyczne generowanie i publikowanie PREMIUM artykułów wysokiej jakości wykorzystując Perplexity, OpenAI i Facebook Graph API. Wsparcie dla wielu języków (PL, DE, EN, UK). Zoptymalizowane dla Google AdSense.
+ * Version: 1.3.0
  * Author: Twoja Nazwa
  * Author URI: https://twojadomena.pl
  * License: GPL2
@@ -16,7 +16,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Definicje stałych
-define('AICP_VERSION', '1.2.0');
+define('AICP_VERSION', '1.3.0');
 define('AICP_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('AICP_PLUGIN_URL', plugin_dir_url(__FILE__));
 

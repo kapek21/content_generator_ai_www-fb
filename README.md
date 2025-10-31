@@ -1,6 +1,9 @@
 # AI Content Publisher - Wtyczka WordPress
 
-🤖 Automatyczne generowanie i publikowanie artykułów wykorzystując sztuczną inteligencję (Perplexity, OpenAI) z integracją Facebook. Obsługa 4 języków: Polski 🇵🇱, Niemiecki 🇩🇪, Angielski 🇬🇧, Ukraiński 🇺🇦
+💎 **PREMIUM CONTENT** - Automatyczne generowanie i publikowanie artykułów **WYSOKIEJ JAKOŚCI** wykorzystując sztuczną inteligencję (Perplexity, OpenAI) z integracją Facebook. 
+
+🌍 Obsługa 4 języków: Polski 🇵🇱, Niemiecki 🇩🇪, Angielski 🇬🇧, Ukraiński 🇺🇦  
+⭐ **Zoptymalizowane dla Google AdSense** - artykuły premium o wysokiej wartości merytorycznej
 
 ## 📋 Spis treści
 
@@ -29,8 +32,15 @@ AI Content Publisher to zaawansowana wtyczka WordPress, która automatyzuje proc
 
 ### Główne funkcje:
 
+- 💎 **PREMIUM CONTENT** - Artykuły wysokiej jakości dla Google AdSense (v1.3.0):
+  - Długość: 1500-1800 słów (domyślnie 1600)
+  - Dogłębna analiza przyczyn i skutków
+  - Konkretne dane, statystyki, cytaty ekspertów
+  - Bogate słownictwo i storytelling
+  - Unikalne perspektywy i prognozy
+  - Zero clickbaitu - 100% wartościowa treść
 - ✅ **Automatyczne wyszukiwanie newsów** - Perplexity przeszukuje internet w poszukiwaniu najnowszych informacji
-- ✅ **Inteligentne generowanie treści** - GPT-4 tworzy wysokiej jakości artykuły dziennikarskie
+- ✅ **Inteligentne generowanie treści** - GPT-4 tworzy artykuły analityczne klasy premium
 - ✅ **Generowanie obrazów AI** - DALL-E 3 tworzy unikalne obrazy dla każdego artykułu
 - ✅ **Publikacja na Facebook** - automatyczne posty ze zdjęciami i linkami
 - 🌍 **Wsparcie wielu języków** - Polski, Niemiecki, Angielski, Ukraiński (wszystkie prompty AI dostosowane)
@@ -43,12 +53,19 @@ AI Content Publisher to zaawansowana wtyczka WordPress, która automatyzuje proc
 
 ### Szczegóły techniczne:
 
-- Artykuły zawierają nazwę województwa minimum 3x
-- Długość artykułu: konfigurowalna (domyślnie 1200 słów)
-- Struktura: tytuł (H1), wprowadzenie, sekcje z podtytułami (H2), podsumowanie
+**Premium Content (v1.3.0):**
+- Artykuły zawierają nazwę województwa/regionu 5-7 razy
+- Długość artykułu: konfigurowalna (domyślnie 1600 słów, rekomendacja: 1500-1800)
+- Struktura premium: tytuł (H1), lead (2-3 akapity), 4-6 sekcji (H2) z podsekcjami (H3), podsumowanie
+- Każda sekcja zawiera analizę przyczyn-skutków
+- Konkretne dane: liczby, statystyki, procenty, daty
+- Cytaty ekspertów z imionami i stanowiskami
+- Kontekst historyczny i porównania międzyregionalne
+- Storytelling z mikrohistoriami
 - Format HTML gotowy do publikacji
-- Własne słowa kluczowe do wyszukiwania
+- Własne słowa kluczowe do wyszukiwania (z synonimami)
 - Pomijanie kategorii "Bez kategorii"
+- **Zoptymalizowane dla maksymalnej wartości w Google AdSense**
 
 ## 🔧 Wymagania
 

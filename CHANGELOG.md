@@ -5,6 +5,47 @@ Wszystkie istotne zmiany w projekcie AI Content Publisher będą dokumentowane w
 Format oparty na [Keep a Changelog](https://keepachangelog.com/pl/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/lang/pl/).
 
+## [1.3.0] - 2025-10-31
+
+### Dodane
+- **💎 Premium Content - Artykuły wysokiej jakości dla Google AdSense**
+  - Znacząco ulepszone prompty AI dla generowania wartościowych treści
+  - System prompt: Nagradzany dziennikarz analityczny, ekspert od premium content
+  - Zwiększona długość artykułów: domyślnie 1600 słów (rekomendacja: 1500-1800)
+  - 9 szczegółowych wymagań jakościowych w każdym języku:
+    1. Długość i głębia (1500-1800 słów)
+    2. Lokalizacja (5-7 wzmianek o regionie)
+    3. Organiczne wplecenie słów kluczowych
+    4. Premium struktura (H1, lead, 4-6 sekcji H2, podsekcje H3)
+    5. Wartość merytoryczna (konkretne dane, cytaty ekspertów, analiza przyczyn-skutków)
+    6. Jakość językowa (bogate słownictwo, precyzja, zero powtórzeń)
+    7. Storytelling (mikrohistorie, case studies, humanizacja)
+    8. Optymalizacja SEO i AdSense (naturalne słowa kluczowe, pytania retoryczne)
+    9. Unikalne elementy (własna analiza, porównania, prognozy)
+
+### Zmienione
+- Zaktualizowano wszystkie prompty dla 4 języków (PL, DE, EN, UK)
+- Zwiększono domyślną długość artykułów z 1200 do 1600 słów
+- Zaktualizowano minimum długości artykułów z 500 do 800 słów
+- Dodano wskazówki w ustawieniach o rekomendowanej długości dla premium content
+- Artykuły teraz zawierają znacznie więcej:
+  - Konkretnych danych i statystyk
+  - Cytatów ekspertów
+  - Analiz przyczyn i skutków
+  - Kontekstu historycznego
+  - Różnych perspektyw
+  - Elementów storytellingu
+  - Prognoz i rekomendacji
+
+### Cel aktualizacji
+- Maksymalizacja wartości treści dla Google AdSense
+- Generowanie artykułów klasy premium zamiast standardowych
+- Zwiększenie zaangażowania czytelników
+- Lepsze pozycjonowanie w Google (SEO)
+- Wyższa stawka CPC/CPM w AdSense dzięki jakości treści
+
+---
+
 ## [1.2.0] - 2025-10-07
 
 ### Dodane

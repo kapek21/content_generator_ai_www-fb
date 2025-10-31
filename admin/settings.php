@@ -33,7 +33,7 @@ $fb_token = get_option('aicp_facebook_access_token', '');
 $keywords = get_option('aicp_keywords', '');
 $auto_enabled = get_option('aicp_auto_generate_enabled', '0');
 $auto_time = get_option('aicp_auto_generate_time', '08:00');
-$article_length = get_option('aicp_article_length', '1200');
+$article_length = get_option('aicp_article_length', '1600');
 $province_name = get_option('aicp_province_name', AI_Content_Publisher::get_province_from_domain());
 $content_language = get_option('aicp_content_language', 'pl');
 ?>
@@ -233,12 +233,13 @@ $content_language = get_option('aicp_content_language', 'pl');
                             name="aicp_article_length" 
                             value="<?php echo esc_attr($article_length); ?>"
                             class="small-text"
-                            min="500"
+                            min="800"
                             max="3000"
                             step="100"
                         />
                         <p class="description">
-                            Docelowa długość generowanych artykułów (domyślnie: 1200 słów)
+                            Docelowa długość generowanych artykułów (domyślnie: 1600 słów dla lepszej wartości w Google AdSense)<br>
+                            <strong>Rekomendacja:</strong> 1500-1800 słów dla artykułów premium wysokiej jakości
                         </p>
                     </td>
                 </tr>

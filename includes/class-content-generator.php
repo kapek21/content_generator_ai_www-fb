@@ -65,7 +65,7 @@ class AICP_Content_Generator {
         
         // Krok 2: Wygeneruj artykuł przez OpenAI
         $result['steps'][] = 'Generowanie artykułu przez OpenAI...';
-        $article_length = get_option('aicp_article_length', 1200);
+        $article_length = get_option('aicp_article_length', 1600);
         $article_html = $this->openai->generate_article(
             $news_data,
             $category->name,

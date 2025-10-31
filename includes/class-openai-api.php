@@ -166,22 +166,26 @@ class AICP_OpenAI_API {
         $language_name = AI_Content_Publisher::get_language_full_name($language);
         
         $prompts = array(
-            'pl' => "Jesteś doświadczonym dziennikarzem i copywriterem specjalizującym się w tworzeniu treści SEO. " .
-                   "Twoje artykuły są dobrze napisane, interesujące i zoptymalizowane pod kątem wyszukiwarek. " .
-                   "Piszesz w języku polskim, używając naturalnego, płynnego stylu. " .
-                   "Artykuły zawierają około {$target_length} słów.",
-            'de' => "Du bist ein erfahrener Journalist und Texter, der sich auf die Erstellung von SEO-Inhalten spezialisiert hat. " .
-                   "Deine Artikel sind gut geschrieben, interessant und für Suchmaschinen optimiert. " .
-                   "Du schreibst auf Deutsch mit einem natürlichen, fließenden Stil. " .
-                   "Die Artikel enthalten etwa {$target_length} Wörter.",
-            'en' => "You are an experienced journalist and copywriter specializing in creating SEO content. " .
-                   "Your articles are well-written, interesting and optimized for search engines. " .
-                   "You write in English, using a natural, flowing style. " .
-                   "Articles contain approximately {$target_length} words.",
-            'uk' => "Ти досвідчений журналіст і копірайтер, який спеціалізується на створенні SEO-контенту. " .
-                   "Твої статті добре написані, цікаві та оптимізовані для пошукових систем. " .
-                   "Ти пишеш українською мовою, використовуючи природний, плавний стиль. " .
-                   "Статті містять приблизно {$target_length} слів."
+            'pl' => "Jesteś nagradzanym dziennikarzem analitycznym i ekspertem od premium content, specjalizującym się w tworzeniu WARTOŚCIOWYCH treści wysokiej jakości dla Google AdSense. " .
+                   "Twoje artykuły to dogłębne analizy, które wyróżniają się profesjonalizmem, unikalnymi perspektywami i eksperckim podejściem. " .
+                   "Piszesz w języku polskim, używając bogatego słownictwa, precyzyjnego języka i wciągającego storytellingu. " .
+                   "Twoje teksty są długie, szczegółowe i zawierają około {$target_length} słów, pełne konkretnych danych, statystyk i analizy przyczyn-skutków. " .
+                   "Unikasz clickbaitu i powierzchowności - każde zdanie wnosi wartość merytoryczną.",
+            'de' => "Du bist ein preisgekrönter analytischer Journalist und Premium-Content-Experte, spezialisiert auf die Erstellung WERTVOLLER hochwertiger Inhalte für Google AdSense. " .
+                   "Deine Artikel sind tiefgehende Analysen, die sich durch Professionalität, einzigartige Perspektiven und Expertenwissen auszeichnen. " .
+                   "Du schreibst auf Deutsch mit reichhaltigem Vokabular, präziser Sprache und fesselndem Storytelling. " .
+                   "Deine Texte sind lang, detailliert und enthalten etwa {$target_length} Wörter, voller konkreter Daten, Statistiken und Ursache-Wirkungs-Analysen. " .
+                   "Du vermeidest Clickbait und Oberflächlichkeit - jeder Satz bietet inhaltlichen Mehrwert.",
+            'en' => "You are an award-winning analytical journalist and premium content expert, specializing in creating VALUABLE high-quality content for Google AdSense. " .
+                   "Your articles are in-depth analyses that stand out through professionalism, unique perspectives, and expert approach. " .
+                   "You write in English using rich vocabulary, precise language, and engaging storytelling. " .
+                   "Your texts are long, detailed and contain approximately {$target_length} words, full of concrete data, statistics, and cause-effect analysis. " .
+                   "You avoid clickbait and superficiality - every sentence adds substantial value.",
+            'uk' => "Ти нагороджений аналітичний журналіст та експерт з преміум-контенту, який спеціалізується на створенні ЦІННОГО високоякісного контенту для Google AdSense. " .
+                   "Твої статті - це глибокі аналізи, які виділяються професіоналізмом, унікальними перспективами та експертним підходом. " .
+                   "Ти пишеш українською мовою, використовуючи багатий словниковий запас, точну мову та захоплюючий сторітелінг. " .
+                   "Твої тексти довгі, детальні та містять приблизно {$target_length} слів, повні конкретних даних, статистики та аналізу причин-наслідків. " .
+                   "Ти уникаєш клікбейту та поверхневості - кожне речення додає змістовну цінність."
         );
         
         return isset($prompts[$language]) ? $prompts[$language] : $prompts['pl'];
@@ -193,60 +197,64 @@ class AICP_OpenAI_API {
     private function build_article_user_prompt($news_data, $category_name, $province, $keywords, $language = 'pl') {
         $templates = array(
             'pl' => array(
-                'intro' => "Napisz artykuł publicystyczny na temat: {$category_name} w województwie {$province}.\n\n",
+                'intro' => "Napisz WARTOŚCIOWY, dogłębny artykuł analityczny na temat: {$category_name} w województwie {$province}.\n\n",
                 'base' => "Bazuj na poniższych aktualnych informacjach:\n{$news_data}\n\n",
-                'requirements' => "WYMAGANIA:\n",
-                'req1' => "1. Artykuł powinien mieć około 1200 słów\n",
-                'req2' => "2. Nazwa województwa '{$province}' musi pojawić się co najmniej 3 razy w tekście\n",
-                'req3' => "3. Naturalnie wpleć następujące słowa kluczowe: %s\n",
-                'req4' => "4. Użyj struktury: tytuł (H1), wprowadzenie, 3-4 sekcje z podtytułami (H2), podsumowanie\n",
-                'req5' => "5. Pisz w sposób angażujący, używając konkretnych faktów i danych\n",
-                'req6' => "6. Zachowaj neutralny, profesjonalny ton dziennikarza\n",
-                'req7' => "7. Dodaj elementy storytellingu, aby tekst był ciekawy\n",
-                'req8' => "8. Zoptymalizuj pod SEO - naturalne użycie słów kluczowych\n\n",
-                'format' => "Zwróć artykuł w formacie HTML z odpowiednimi tagami (h1, h2, p, strong)."
+                'requirements' => "WYMAGANIA PREMIUM CONTENT (dla maksymalnej wartości w Google AdSense):\n\n",
+                'req1' => "1. DŁUGOŚĆ I GŁĘBIA: Artykuł musi mieć MINIMUM 1500-1800 słów (nie oszczędzaj na szczegółach)\n",
+                'req2' => "2. LOKALIZACJA: Nazwa województwa '{$province}' musi pojawić się 5-7 razy naturalnie w tekście\n",
+                'req3' => "3. SŁOWA KLUCZOWE: Wpleć organicznie następujące frazy: %s (używaj synonimów i pokrewnych terminów)\n",
+                'req4' => "4. STRUKTURA PREMIUM:\n   - Tytuł (H1): Konkretny, angażujący, bez clickbaitu\n   - Lead (2-3 akapity): Wprowadzenie z kluczowymi informacjami\n   - 4-6 sekcji merytorycznych (H2): Każda z analizą przyczyn-skutków\n   - Podsekcje (H3) tam gdzie potrzebne: Dla większej szczegółowości\n   - Podsumowanie z przewidywaniami lub rekomendacjami\n\n",
+                'req5' => "5. WARTOŚĆ MERYTORYCZNA:\n   - Używaj KONKRETNYCH liczb, danych, statystyk (np. kwoty, procenty, daty)\n   - Cytuj ekspertów lub przedstawicieli instytucji (prawdziwe imiona i stanowiska)\n   - Analizuj PRZYCZYNY i SKUTKI wydarzeń\n   - Dodaj KONTEKST historyczny lub porównania z innymi regionami\n   - Przedstaw różne PERSPEKTYWY (władze, mieszkańcy, eksperci)\n\n",
+                'req6' => "6. JAKOŚĆ JĘZYKOWA:\n   - Używaj BOGATEGO słownictwa (synonimy, profesjonalne terminy)\n   - Unikaj powtórzeń - każdy akapit wnosi nową wartość\n   - Stosuj precyzyjne określenia zamiast ogólników\n   - Łącz fakty z narracją (storytelling z danymi)\n\n",
+                'req7' => "7. STORYTELLING:\n   - Rozpocznij od konkretnego przykładu, sytuacji lub wydarzenia\n   - Pokaż wpływ na życie mieszkańców (humanizuj treść)\n   - Dodaj mikrohistorie lub case studies\n   - Zakończ wizją przyszłości lub wnioskami\n\n",
+                'req8' => "8. OPTYMALIZACJA SEO I ADSENSE:\n   - Naturalne rozmieszczenie słów kluczowych (nie forsuj)\n   - Długie akapity (3-5 zdań) dla lepszej czytelności\n   - Używaj pytań retorycznych angażujących czytelnika\n   - Dodaj wewnętrzne linkowanie (gdzie stosowne)\n   - ZERO clickbaitu, sensacji, fake newsów\n\n",
+                'req9' => "9. UNIKALNE ELEMENTY:\n   - Twoja własna analiza i interpretacja faktów\n   - Porównania międzyregionalne lub międzynarodowe\n   - Prognozy lub rekomendacje oparte na danych\n   - Wskazanie implikacji dla różnych grup (mieszkańcy, firmy, samorząd)\n\n",
+                'format' => "Zwróć artykuł w formacie HTML z odpowiednimi tagami (h1, h2, h3, p, strong, em). Użyj <strong> dla kluczowych informacji i <em> dla akcentów."
             ),
             'de' => array(
-                'intro' => "Schreibe einen redaktionellen Artikel zum Thema: {$category_name} im Bundesland {$province}.\n\n",
+                'intro' => "Schreibe einen WERTVOLLEN, tiefgehenden analytischen Artikel zum Thema: {$category_name} im Bundesland {$province}.\n\n",
                 'base' => "Basiere auf folgenden aktuellen Informationen:\n{$news_data}\n\n",
-                'requirements' => "ANFORDERUNGEN:\n",
-                'req1' => "1. Der Artikel sollte etwa 1200 Wörter umfassen\n",
-                'req2' => "2. Der Name des Bundeslandes '{$province}' muss mindestens 3-mal im Text erscheinen\n",
-                'req3' => "3. Füge natürlich folgende Schlüsselwörter ein: %s\n",
-                'req4' => "4. Verwende folgende Struktur: Titel (H1), Einleitung, 3-4 Abschnitte mit Untertiteln (H2), Zusammenfassung\n",
-                'req5' => "5. Schreibe ansprechend und verwende konkrete Fakten und Daten\n",
-                'req6' => "6. Behalte einen neutralen, professionellen journalistischen Ton bei\n",
-                'req7' => "7. Füge Storytelling-Elemente hinzu, um den Text interessant zu gestalten\n",
-                'req8' => "8. Optimiere für SEO - natürliche Verwendung von Schlüsselwörtern\n\n",
-                'format' => "Gib den Artikel im HTML-Format mit entsprechenden Tags zurück (h1, h2, p, strong)."
+                'requirements' => "PREMIUM-CONTENT-ANFORDERUNGEN (für maximalen Wert bei Google AdSense):\n\n",
+                'req1' => "1. LÄNGE UND TIEFE: Der Artikel muss MINDESTENS 1500-1800 Wörter umfassen (spare nicht an Details)\n",
+                'req2' => "2. LOKALISIERUNG: Der Name des Bundeslandes '{$province}' muss 5-7 Mal natürlich im Text erscheinen\n",
+                'req3' => "3. SCHLÜSSELWÖRTER: Füge organisch folgende Begriffe ein: %s (verwende Synonyme und verwandte Begriffe)\n",
+                'req4' => "4. PREMIUM-STRUKTUR:\n   - Titel (H1): Konkret, ansprechend, kein Clickbait\n   - Lead (2-3 Absätze): Einleitung mit Schlüsselinformationen\n   - 4-6 inhaltliche Abschnitte (H2): Jeder mit Ursache-Wirkungs-Analyse\n   - Unterabschnitte (H3) wo nötig: Für mehr Details\n   - Zusammenfassung mit Prognosen oder Empfehlungen\n\n",
+                'req5' => "5. INHALTLICHER WERT:\n   - Verwende KONKRETE Zahlen, Daten, Statistiken (z.B. Beträge, Prozente, Termine)\n   - Zitiere Experten oder Institutionsvertreter (echte Namen und Positionen)\n   - Analysiere URSACHEN und FOLGEN von Ereignissen\n   - Füge historischen KONTEXT oder Vergleiche mit anderen Regionen hinzu\n   - Präsentiere verschiedene PERSPEKTIVEN (Behörden, Bürger, Experten)\n\n",
+                'req6' => "6. SPRACHLICHE QUALITÄT:\n   - Verwende REICHHALTIGES Vokabular (Synonyme, Fachbegriffe)\n   - Vermeide Wiederholungen - jeder Absatz bietet neuen Wert\n   - Nutze präzise Formulierungen statt Allgemeinplätze\n   - Verbinde Fakten mit Erzählung (Storytelling mit Daten)\n\n",
+                'req7' => "7. STORYTELLING:\n   - Beginne mit konkretem Beispiel, Situation oder Ereignis\n   - Zeige Auswirkungen auf das Leben der Bürger (humanisiere den Inhalt)\n   - Füge Mikrogeschichten oder Fallstudien hinzu\n   - Schließe mit Zukunftsvision oder Schlussfolgerungen\n\n",
+                'req8' => "8. SEO- UND ADSENSE-OPTIMIERUNG:\n   - Natürliche Verteilung der Schlüsselwörter (nicht erzwingen)\n   - Längere Absätze (3-5 Sätze) für bessere Lesbarkeit\n   - Verwende rhetorische Fragen für Lesereinbindung\n   - Füge interne Verlinkungen hinzu (wo angemessen)\n   - KEIN Clickbait, keine Sensationen, keine Fake News\n\n",
+                'req9' => "9. EINZIGARTIGE ELEMENTE:\n   - Deine eigene Analyse und Interpretation der Fakten\n   - Interregionale oder internationale Vergleiche\n   - Prognosen oder datenbasierte Empfehlungen\n   - Aufzeigen von Implikationen für verschiedene Gruppen (Bürger, Unternehmen, Verwaltung)\n\n",
+                'format' => "Gib den Artikel im HTML-Format mit entsprechenden Tags zurück (h1, h2, h3, p, strong, em). Verwende <strong> für Schlüsselinformationen und <em> für Akzente."
             ),
             'en' => array(
-                'intro' => "Write an editorial article on: {$category_name} in the state/region of {$province}.\n\n",
+                'intro' => "Write a VALUABLE, in-depth analytical article on: {$category_name} in the state/region of {$province}.\n\n",
                 'base' => "Base it on the following current information:\n{$news_data}\n\n",
-                'requirements' => "REQUIREMENTS:\n",
-                'req1' => "1. The article should be approximately 1200 words\n",
-                'req2' => "2. The name of the state/region '{$province}' must appear at least 3 times in the text\n",
-                'req3' => "3. Naturally incorporate the following keywords: %s\n",
-                'req4' => "4. Use the structure: title (H1), introduction, 3-4 sections with subtitles (H2), summary\n",
-                'req5' => "5. Write engagingly, using specific facts and data\n",
-                'req6' => "6. Maintain a neutral, professional journalistic tone\n",
-                'req7' => "7. Add storytelling elements to make the text interesting\n",
-                'req8' => "8. Optimize for SEO - natural use of keywords\n\n",
-                'format' => "Return the article in HTML format with appropriate tags (h1, h2, p, strong)."
+                'requirements' => "PREMIUM CONTENT REQUIREMENTS (for maximum value in Google AdSense):\n\n",
+                'req1' => "1. LENGTH AND DEPTH: The article must be AT LEAST 1500-1800 words (don't skimp on details)\n",
+                'req2' => "2. LOCALIZATION: The name of the state/region '{$province}' must appear 5-7 times naturally in the text\n",
+                'req3' => "3. KEYWORDS: Organically incorporate the following phrases: %s (use synonyms and related terms)\n",
+                'req4' => "4. PREMIUM STRUCTURE:\n   - Title (H1): Specific, engaging, no clickbait\n   - Lead (2-3 paragraphs): Introduction with key information\n   - 4-6 substantive sections (H2): Each with cause-effect analysis\n   - Subsections (H3) where needed: For greater detail\n   - Summary with predictions or recommendations\n\n",
+                'req5' => "5. SUBSTANTIVE VALUE:\n   - Use SPECIFIC numbers, data, statistics (e.g., amounts, percentages, dates)\n   - Quote experts or institutional representatives (real names and positions)\n   - Analyze CAUSES and EFFECTS of events\n   - Add historical CONTEXT or comparisons with other regions\n   - Present different PERSPECTIVES (authorities, residents, experts)\n\n",
+                'req6' => "6. LANGUAGE QUALITY:\n   - Use RICH vocabulary (synonyms, professional terms)\n   - Avoid repetition - each paragraph adds new value\n   - Use precise expressions instead of generalities\n   - Combine facts with narrative (storytelling with data)\n\n",
+                'req7' => "7. STORYTELLING:\n   - Start with a concrete example, situation, or event\n   - Show impact on residents' lives (humanize content)\n   - Add micro-stories or case studies\n   - End with a vision of the future or conclusions\n\n",
+                'req8' => "8. SEO AND ADSENSE OPTIMIZATION:\n   - Natural distribution of keywords (don't force it)\n   - Longer paragraphs (3-5 sentences) for better readability\n   - Use rhetorical questions to engage readers\n   - Add internal linking (where appropriate)\n   - ZERO clickbait, sensationalism, fake news\n\n",
+                'req9' => "9. UNIQUE ELEMENTS:\n   - Your own analysis and interpretation of facts\n   - Inter-regional or international comparisons\n   - Forecasts or data-driven recommendations\n   - Indication of implications for different groups (residents, businesses, government)\n\n",
+                'format' => "Return the article in HTML format with appropriate tags (h1, h2, h3, p, strong, em). Use <strong> for key information and <em> for emphasis."
             ),
             'uk' => array(
-                'intro' => "Напиши публіцистичну статтю на тему: {$category_name} в регіоні {$province}.\n\n",
+                'intro' => "Напиши ЦІННУ, глибоку аналітичну статтю на тему: {$category_name} в регіоні {$province}.\n\n",
                 'base' => "Базуйся на наступній актуальній інформації:\n{$news_data}\n\n",
-                'requirements' => "ВИМОГИ:\n",
-                'req1' => "1. Стаття повинна містити близько 1200 слів\n",
-                'req2' => "2. Назва регіону '{$province}' повинна з'явитися принаймні 3 рази в тексті\n",
-                'req3' => "3. Природно вплети наступні ключові слова: %s\n",
-                'req4' => "4. Використовуй структуру: заголовок (H1), вступ, 3-4 розділи з підзаголовками (H2), висновок\n",
-                'req5' => "5. Пиши захоплююче, використовуючи конкретні факти та дані\n",
-                'req6' => "6. Дотримуйся нейтрального, професійного журналістського тону\n",
-                'req7' => "7. Додай елементи сторітелінгу, щоб текст був цікавим\n",
-                'req8' => "8. Оптимізуй під SEO - природне використання ключових слів\n\n",
-                'format' => "Поверни статтю у форматі HTML з відповідними тегами (h1, h2, p, strong)."
+                'requirements' => "ВИМОГИ ДО ПРЕМІУМ-КОНТЕНТУ (для максимальної цінності в Google AdSense):\n\n",
+                'req1' => "1. ОБСЯГ І ГЛИБИНА: Стаття повинна містити МІНІМУМ 1500-1800 слів (не економ на деталях)\n",
+                'req2' => "2. ЛОКАЛІЗАЦІЯ: Назва регіону '{$province}' повинна з'явитися 5-7 разів природно в тексті\n",
+                'req3' => "3. КЛЮЧОВІ СЛОВА: Органічно вплети наступні фрази: %s (використовуй синоніми та споріднені терміни)\n",
+                'req4' => "4. ПРЕМІУМ-СТРУКТУРА:\n   - Заголовок (H1): Конкретний, цікавий, без клікбейту\n   - Лід (2-3 абзаци): Вступ з ключовою інформацією\n   - 4-6 змістовних розділів (H2): Кожен з аналізом причин-наслідків\n   - Підрозділи (H3) де потрібно: Для більшої деталізації\n   - Підсумок з прогнозами або рекомендаціями\n\n",
+                'req5' => "5. ЗМІСТОВНА ЦІННІСТЬ:\n   - Використовуй КОНКРЕТНІ цифри, дані, статистику (напр., суми, відсотки, дати)\n   - Цитуй експертів або представників установ (справжні імена та посади)\n   - Аналізуй ПРИЧИНИ та НАСЛІДКИ подій\n   - Додай історичний КОНТЕКСТ або порівняння з іншими регіонами\n   - Представ різні ПЕРСПЕКТИВИ (влада, мешканці, експерти)\n\n",
+                'req6' => "6. МОВНА ЯКІСТЬ:\n   - Використовуй БАГАТИЙ словниковий запас (синоніми, професійні терміни)\n   - Уникай повторень - кожен абзац додає нову цінність\n   - Застосовуй точні формулювання замість загальних фраз\n   - Поєднуй факти з наративом (сторітелінг з даними)\n\n",
+                'req7' => "7. СТОРІТЕЛІНГ:\n   - Почни з конкретного прикладу, ситуації або події\n   - Покажи вплив на життя мешканців (гуманізуй контент)\n   - Додай мікроісторії або кейс-стаді\n   - Завершуй баченням майбутнього або висновками\n\n",
+                'req8' => "8. SEO ТА ADSENSE ОПТИМІЗАЦІЯ:\n   - Природний розподіл ключових слів (не форсуй)\n   - Довші абзаци (3-5 речень) для кращої читабельності\n   - Використовуй риторичні питання для залучення читачів\n   - Додай внутрішні посилання (де доречно)\n   - НУЛЬ клікбейту, сенсацій, фейкових новин\n\n",
+                'req9' => "9. УНІКАЛЬНІ ЕЛЕМЕНТИ:\n   - Твій власний аналіз та інтерпретація фактів\n   - Міжрегіональні або міжнародні порівняння\n   - Прогнози або рекомендації на основі даних\n   - Вказівка на наслідки для різних груп (мешканці, бізнес, влада)\n\n",
+                'format' => "Поверни статтю у форматі HTML з відповідними тегами (h1, h2, h3, p, strong, em). Використовуй <strong> для ключової інформації та <em> для акцентів."
             )
         );
         
@@ -268,6 +276,7 @@ class AICP_OpenAI_API {
         $prompt .= $template['req6'];
         $prompt .= $template['req7'];
         $prompt .= $template['req8'];
+        $prompt .= $template['req9'];
         $prompt .= $template['format'];
         
         return $prompt;
