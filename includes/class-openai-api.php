@@ -197,11 +197,11 @@ class AICP_OpenAI_API {
     private function build_article_user_prompt($news_data, $category_name, $province, $keywords, $language = 'pl') {
         $templates = array(
             'pl' => array(
-                'intro' => "Napisz WARTOŚCIOWY, dogłębny artykuł analityczny na temat: {$category_name} w województwie {$province}.\n\n",
+                'intro' => "Napisz WARTOŚCIOWY, dogłębny artykuł analityczny WYŁĄCZNIE o województwie {$province} na temat: {$category_name}.\n\n",
                 'base' => "Bazuj na poniższych aktualnych informacjach:\n{$news_data}\n\n",
                 'requirements' => "WYMAGANIA PREMIUM CONTENT (dla maksymalnej wartości w Google AdSense):\n\n",
                 'req1' => "1. DŁUGOŚĆ I GŁĘBIA: Artykuł musi mieć MINIMUM 1500-1800 słów (nie oszczędzaj na szczegółach)\n",
-                'req2' => "2. LOKALIZACJA: Nazwa województwa '{$province}' musi pojawić się 5-7 razy naturalnie w tekście\n",
+                'req2' => "2. LOKALIZACJA - NAJWAŻNIEJSZE!!:\n   - Artykuł MUSI dotyczyć WYŁĄCZNIE województwa '{$province}'\n   - Nazwa '{$province}' musi pojawić się 5-7 razy w tekście\n   - Wszystkie przykłady, wydarzenia, dane MUSZĄ być z województwa '{$province}'\n   - Cytuj osoby/firmy/instytucje z województwa '{$province}'\n   - Porównuj z innymi województwami, ale koncentruj się TYLKO na '{$province}'\n   - NIE pisz o innych województwach jako głównym temacie\n   - Jeśli informacje nie dotyczą '{$province}', NIE używaj ich!\n\n",
                 'req3' => "3. SŁOWA KLUCZOWE: Wpleć organicznie następujące frazy: %s (używaj synonimów i pokrewnych terminów)\n",
                 'req4' => "4. STRUKTURA PREMIUM:\n   - Tytuł (H1): Konkretny, angażujący, bez clickbaitu\n   - Lead (2-3 akapity): Wprowadzenie z kluczowymi informacjami\n   - 4-6 sekcji merytorycznych (H2): Każda z analizą przyczyn-skutków\n   - Podsekcje (H3) tam gdzie potrzebne: Dla większej szczegółowości\n   - Podsumowanie z przewidywaniami lub rekomendacjami\n\n",
                 'req5' => "5. WARTOŚĆ MERYTORYCZNA:\n   - Używaj KONKRETNYCH liczb, danych, statystyk (np. kwoty, procenty, daty)\n   - Cytuj ekspertów lub przedstawicieli instytucji (prawdziwe imiona i stanowiska)\n   - Analizuj PRZYCZYNY i SKUTKI wydarzeń\n   - Dodaj KONTEKST historyczny lub porównania z innymi regionami\n   - Przedstaw różne PERSPEKTYWY (władze, mieszkańcy, eksperci)\n\n",
@@ -212,11 +212,11 @@ class AICP_OpenAI_API {
                 'format' => "Zwróć artykuł w formacie HTML z odpowiednimi tagami (h1, h2, h3, p, strong, em). Użyj <strong> dla kluczowych informacji i <em> dla akcentów."
             ),
             'de' => array(
-                'intro' => "Schreibe einen WERTVOLLEN, tiefgehenden analytischen Artikel zum Thema: {$category_name} im Bundesland {$province}.\n\n",
+                'intro' => "Schreibe einen WERTVOLLEN, tiefgehenden analytischen Artikel AUSSCHLIESSLICH über {$province} zum Thema: {$category_name}.\n\n",
                 'base' => "Basiere auf folgenden aktuellen Informationen:\n{$news_data}\n\n",
                 'requirements' => "PREMIUM-CONTENT-ANFORDERUNGEN (für maximalen Wert bei Google AdSense):\n\n",
                 'req1' => "1. LÄNGE UND TIEFE: Der Artikel muss MINDESTENS 1500-1800 Wörter umfassen (spare nicht an Details)\n",
-                'req2' => "2. LOKALISIERUNG: Der Name des Bundeslandes '{$province}' muss 5-7 Mal natürlich im Text erscheinen\n",
+                'req2' => "2. LOKALISIERUNG - AM WICHTIGSTEN!!:\n   - Der Artikel MUSS AUSSCHLIESSLICH über '{$province}' handeln\n   - Der Name '{$province}' muss 5-7 Mal im Text erscheinen\n   - Alle Beispiele, Ereignisse, Daten MÜSSEN aus '{$province}' sein\n   - Zitiere Personen/Firmen/Institutionen aus '{$province}'\n   - Vergleiche mit anderen Regionen, aber konzentriere dich NUR auf '{$province}'\n   - Schreibe NICHT über andere Regionen als Hauptthema\n   - Wenn Informationen nicht '{$province}' betreffen, verwende sie NICHT!\n\n",
                 'req3' => "3. SCHLÜSSELWÖRTER: Füge organisch folgende Begriffe ein: %s (verwende Synonyme und verwandte Begriffe)\n",
                 'req4' => "4. PREMIUM-STRUKTUR:\n   - Titel (H1): Konkret, ansprechend, kein Clickbait\n   - Lead (2-3 Absätze): Einleitung mit Schlüsselinformationen\n   - 4-6 inhaltliche Abschnitte (H2): Jeder mit Ursache-Wirkungs-Analyse\n   - Unterabschnitte (H3) wo nötig: Für mehr Details\n   - Zusammenfassung mit Prognosen oder Empfehlungen\n\n",
                 'req5' => "5. INHALTLICHER WERT:\n   - Verwende KONKRETE Zahlen, Daten, Statistiken (z.B. Beträge, Prozente, Termine)\n   - Zitiere Experten oder Institutionsvertreter (echte Namen und Positionen)\n   - Analysiere URSACHEN und FOLGEN von Ereignissen\n   - Füge historischen KONTEXT oder Vergleiche mit anderen Regionen hinzu\n   - Präsentiere verschiedene PERSPEKTIVEN (Behörden, Bürger, Experten)\n\n",
@@ -227,11 +227,11 @@ class AICP_OpenAI_API {
                 'format' => "Gib den Artikel im HTML-Format mit entsprechenden Tags zurück (h1, h2, h3, p, strong, em). Verwende <strong> für Schlüsselinformationen und <em> für Akzente."
             ),
             'en' => array(
-                'intro' => "Write a VALUABLE, in-depth analytical article on: {$category_name} in the state/region of {$province}.\n\n",
+                'intro' => "Write a VALUABLE, in-depth analytical article EXCLUSIVELY about {$province} on: {$category_name}.\n\n",
                 'base' => "Base it on the following current information:\n{$news_data}\n\n",
                 'requirements' => "PREMIUM CONTENT REQUIREMENTS (for maximum value in Google AdSense):\n\n",
                 'req1' => "1. LENGTH AND DEPTH: The article must be AT LEAST 1500-1800 words (don't skimp on details)\n",
-                'req2' => "2. LOCALIZATION: The name of the state/region '{$province}' must appear 5-7 times naturally in the text\n",
+                'req2' => "2. LOCALIZATION - MOST IMPORTANT!!:\n   - The article MUST be EXCLUSIVELY about '{$province}'\n   - The name '{$province}' must appear 5-7 times in the text\n   - All examples, events, data MUST be from '{$province}'\n   - Quote people/companies/institutions from '{$province}'\n   - Compare with other regions, but focus ONLY on '{$province}'\n   - Do NOT write about other regions as the main topic\n   - If information doesn't concern '{$province}', do NOT use it!\n\n",
                 'req3' => "3. KEYWORDS: Organically incorporate the following phrases: %s (use synonyms and related terms)\n",
                 'req4' => "4. PREMIUM STRUCTURE:\n   - Title (H1): Specific, engaging, no clickbait\n   - Lead (2-3 paragraphs): Introduction with key information\n   - 4-6 substantive sections (H2): Each with cause-effect analysis\n   - Subsections (H3) where needed: For greater detail\n   - Summary with predictions or recommendations\n\n",
                 'req5' => "5. SUBSTANTIVE VALUE:\n   - Use SPECIFIC numbers, data, statistics (e.g., amounts, percentages, dates)\n   - Quote experts or institutional representatives (real names and positions)\n   - Analyze CAUSES and EFFECTS of events\n   - Add historical CONTEXT or comparisons with other regions\n   - Present different PERSPECTIVES (authorities, residents, experts)\n\n",
@@ -242,11 +242,11 @@ class AICP_OpenAI_API {
                 'format' => "Return the article in HTML format with appropriate tags (h1, h2, h3, p, strong, em). Use <strong> for key information and <em> for emphasis."
             ),
             'uk' => array(
-                'intro' => "Напиши ЦІННУ, глибоку аналітичну статтю на тему: {$category_name} в регіоні {$province}.\n\n",
+                'intro' => "Напиши ЦІННУ, глибоку аналітичну статтю ВИКЛЮЧНО про {$province} на тему: {$category_name}.\n\n",
                 'base' => "Базуйся на наступній актуальній інформації:\n{$news_data}\n\n",
                 'requirements' => "ВИМОГИ ДО ПРЕМІУМ-КОНТЕНТУ (для максимальної цінності в Google AdSense):\n\n",
                 'req1' => "1. ОБСЯГ І ГЛИБИНА: Стаття повинна містити МІНІМУМ 1500-1800 слів (не економ на деталях)\n",
-                'req2' => "2. ЛОКАЛІЗАЦІЯ: Назва регіону '{$province}' повинна з'явитися 5-7 разів природно в тексті\n",
+                'req2' => "2. ЛОКАЛІЗАЦІЯ - НАЙВАЖЛИВІШЕ!!:\n   - Стаття ПОВИННА стосуватися ВИКЛЮЧНО '{$province}'\n   - Назва '{$province}' повинна з'явитися 5-7 разів у тексті\n   - Всі приклади, події, дані ПОВИННІ бути з '{$province}'\n   - Цитуй людей/компанії/установи з '{$province}'\n   - Порівнюй з іншими регіонами, але зосереджуйся ТІЛЬКИ на '{$province}'\n   - НЕ пиши про інші регіони як основну тему\n   - Якщо інформація не стосується '{$province}', НЕ використовуй її!\n\n",
                 'req3' => "3. КЛЮЧОВІ СЛОВА: Органічно вплети наступні фрази: %s (використовуй синоніми та споріднені терміни)\n",
                 'req4' => "4. ПРЕМІУМ-СТРУКТУРА:\n   - Заголовок (H1): Конкретний, цікавий, без клікбейту\n   - Лід (2-3 абзаци): Вступ з ключовою інформацією\n   - 4-6 змістовних розділів (H2): Кожен з аналізом причин-наслідків\n   - Підрозділи (H3) де потрібно: Для більшої деталізації\n   - Підсумок з прогнозами або рекомендаціями\n\n",
                 'req5' => "5. ЗМІСТОВНА ЦІННІСТЬ:\n   - Використовуй КОНКРЕТНІ цифри, дані, статистику (напр., суми, відсотки, дати)\n   - Цитуй експертів або представників установ (справжні імена та посади)\n   - Аналізуй ПРИЧИНИ та НАСЛІДКИ подій\n   - Додай історичний КОНТЕКСТ або порівняння з іншими регіонами\n   - Представ різні ПЕРСПЕКТИВИ (влада, мешканці, експерти)\n\n",

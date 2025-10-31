@@ -105,28 +105,32 @@ class AICP_Perplexity_API {
         // Szablony zapytań dla różnych języków
         $templates = array(
             'pl' => array(
-                'intro' => "Wyszukaj najnowsze informacje, wydarzenia i newsy związane z tematyką: {$category_name}, które dotyczą województwa {$province} lub regionu {$province}. ",
+                'intro' => "Wyszukaj najnowsze informacje, wydarzenia i newsy związane z tematyką: {$category_name}, które dotyczą WYŁĄCZNIE województwa {$province}. ",
                 'timeframe' => "Skup się na wydarzeniach z ostatnich 7 dni (od {$week_ago} do {$today}). ",
+                'focus' => "WAŻNE: Szukaj TYLKO informacji dotyczących województwa {$province}. NIE uwzględniaj newsów z innych województw. ",
                 'keywords' => "Uwzględnij następujące słowa kluczowe: %s. ",
-                'summary' => "Przedstaw co najmniej 5-7 najważniejszych aktualnych informacji z tego zakresu. Dla każdej informacji podaj konkretne fakty, daty i szczegóły."
+                'summary' => "Przedstaw co najmniej 5-7 najważniejszych aktualnych informacji WYŁĄCZNIE z województwa {$province}. Dla każdej informacji podaj konkretne fakty, daty, szczegóły i POTWIERDŹ że dotyczy to województwa {$province}."
             ),
             'de' => array(
-                'intro' => "Suche die neuesten Informationen, Ereignisse und Nachrichten zum Thema: {$category_name}, die das Bundesland {$province} oder die Region {$province} betreffen. ",
+                'intro' => "Suche die neuesten Informationen, Ereignisse und Nachrichten zum Thema: {$category_name}, die AUSSCHLIESSLICH das Bundesland {$province} betreffen. ",
                 'timeframe' => "Konzentriere dich auf Ereignisse der letzten 7 Tage (vom {$week_ago} bis {$today}). ",
+                'focus' => "WICHTIG: Suche NUR Informationen über {$province}. Berücksichtige KEINE Nachrichten aus anderen Bundesländern. ",
                 'keywords' => "Berücksichtige folgende Schlüsselwörter: %s. ",
-                'summary' => "Präsentiere mindestens 5-7 der wichtigsten aktuellen Informationen aus diesem Bereich. Gib für jede Information konkrete Fakten, Daten und Details an."
+                'summary' => "Präsentiere mindestens 5-7 der wichtigsten aktuellen Informationen AUSSCHLIESSLICH aus {$province}. Gib für jede Information konkrete Fakten, Daten, Details an und BESTÄTIGE dass es sich um {$province} handelt."
             ),
             'en' => array(
-                'intro' => "Search for the latest information, events and news related to: {$category_name}, concerning the state/region of {$province}. ",
+                'intro' => "Search for the latest information, events and news related to: {$category_name}, concerning EXCLUSIVELY the state/region of {$province}. ",
                 'timeframe' => "Focus on events from the last 7 days (from {$week_ago} to {$today}). ",
+                'focus' => "IMPORTANT: Search ONLY for information about {$province}. Do NOT include news from other states/regions. ",
                 'keywords' => "Consider the following keywords: %s. ",
-                'summary' => "Present at least 5-7 of the most important current information from this area. For each item, provide specific facts, dates and details."
+                'summary' => "Present at least 5-7 of the most important current information EXCLUSIVELY from {$province}. For each item, provide specific facts, dates, details and CONFIRM that it concerns {$province}."
             ),
             'uk' => array(
-                'intro' => "Знайди найновішу інформацію, події та новини, пов'язані з темою: {$category_name}, що стосуються регіону {$province}. ",
+                'intro' => "Знайди найновішу інформацію, події та новини, пов'язані з темою: {$category_name}, що стосуються ВИКЛЮЧНО регіону {$province}. ",
                 'timeframe' => "Зосередься на подіях останніх 7 днів (з {$week_ago} до {$today}). ",
+                'focus' => "ВАЖЛИВО: Шукай ТІЛЬКИ інформацію про {$province}. НЕ включай новини з інших регіонів. ",
                 'keywords' => "Враховуй наступні ключові слова: %s. ",
-                'summary' => "Представ принаймні 5-7 найважливіших актуальних інформацій з цієї сфери. Для кожної інформації надай конкретні факти, дати та деталі."
+                'summary' => "Представ принаймні 5-7 найважливіших актуальних інформацій ВИКЛЮЧНО з {$province}. Для кожної інформації надай конкретні факти, дати, деталі та ПІДТВЕРДИ що це стосується {$province}."
             )
         );
         
@@ -134,6 +138,7 @@ class AICP_Perplexity_API {
         
         $query = $template['intro'];
         $query .= $template['timeframe'];
+        $query .= $template['focus'];
         
         if (!empty($keywords)) {
             $keywords_str = implode(', ', $keywords);

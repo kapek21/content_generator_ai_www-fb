@@ -32,6 +32,11 @@ class AICP_Content_Generator {
      * Główna funkcja generująca i publikująca treść
      */
     public function generate_and_publish($category_id) {
+        // Walidacja: Sprawdź czy województwo/region jest ustawione
+        if (empty($this->province) || $this->province === 'custom') {
+            throw new Exception('⚠️ BŁĄD: Nie wybrano województwa/regionu! Przejdź do Ustawienia → Ustawienia Treści i wybierz województwo.');
+        }
+        
         // Pobierz informacje o kategorii
         $category = get_category($category_id);
         

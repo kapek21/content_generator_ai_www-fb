@@ -18,7 +18,14 @@ if (isset($_POST['aicp_save_settings']) && check_admin_referer('aicp_settings_no
     update_option('aicp_auto_generate_enabled', isset($_POST['aicp_auto_generate_enabled']) ? '1' : '0');
     update_option('aicp_auto_generate_time', sanitize_text_field($_POST['aicp_auto_generate_time']));
     update_option('aicp_article_length', intval($_POST['aicp_article_length']));
-    update_option('aicp_province_name', sanitize_text_field($_POST['aicp_province_name']));
+    
+    // Obsługa województwa - dropdown lub custom
+    $province_value = sanitize_text_field($_POST['aicp_province_name']);
+    if ($province_value === 'custom' && !empty($_POST['aicp_province_name_custom'])) {
+        $province_value = sanitize_text_field($_POST['aicp_province_name_custom']);
+    }
+    update_option('aicp_province_name', $province_value);
+    
     update_option('aicp_content_language', sanitize_text_field($_POST['aicp_content_language']));
     
     echo '<div class="notice notice-success"><p>Ustawienia zostały zapisane!</p></div>';
@@ -205,22 +212,79 @@ $content_language = get_option('aicp_content_language', 'pl');
                 
                 <tr>
                     <th scope="row">
-                        <label for="aicp_province_name">Nazwa Województwa/Regionu</label>
+                        <label for="aicp_province_name">Województwo (KLUCZOWE!)</label>
                     </th>
                     <td>
-                        <input 
-                            type="text" 
+                        <select 
                             id="aicp_province_name"
                             name="aicp_province_name" 
-                            value="<?php echo esc_attr($province_name); ?>"
                             class="regular-text"
-                        />
-                        <p class="description">
-                            Nazwa województwa/regionu, którego dotyczy portal (wykryta automatycznie lub ustaw ręcznie).<br>
-                            Dla języka niemieckiego użyj np. "Bayern", "Nordrhein-Westfalen", dla angielskiego "California", "Texas" itp.
+                            style="width: 100%;"
+                        >
+                            <?php
+                            $provinces = array(
+                                'dolnośląskie' => 'Dolnośląskie',
+                                'kujawsko-pomorskie' => 'Kujawsko-pomorskie',
+                                'lubelskie' => 'Lubelskie',
+                                'lubuskie' => 'Lubuskie',
+                                'łódzkie' => 'Łódzkie',
+                                'małopolskie' => 'Małopolskie',
+                                'mazowieckie' => 'Mazowieckie',
+                                'opolskie' => 'Opolskie',
+                                'podkarpackie' => 'Podkarpackie',
+                                'podlaskie' => 'Podlaskie',
+                                'pomorskie' => 'Pomorskie',
+                                'śląskie' => 'Śląskie',
+                                'świętokrzyskie' => 'Świętokrzyskie',
+                                'warmińsko-mazurskie' => 'Warmińsko-mazurskie',
+                                'wielkopolskie' => 'Wielkopolskie',
+                                'zachodniopomorskie' => 'Zachodniopomorskie',
+                                'custom' => '--- Własna nazwa (inne języki) ---'
+                            );
+                            
+                            foreach ($provinces as $value => $label):
+                                $selected = ($province_name === $value) ? 'selected' : '';
+                                // Jeśli province_name nie jest w liście, ustaw jako custom
+                                if (!isset($provinces[$province_name]) && $value === 'custom') {
+                                    $selected = 'selected';
+                                }
+                            ?>
+                                <option value="<?php echo esc_attr($value); ?>" <?php echo $selected; ?>>
+                                    <?php echo esc_html($label); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                        
+                        <div id="custom_province_field" style="margin-top: 10px; <?php echo (!isset($provinces[$province_name]) && $province_name !== '') ? '' : 'display:none;'; ?>">
+                            <input 
+                                type="text" 
+                                id="aicp_province_name_custom"
+                                name="aicp_province_name_custom" 
+                                value="<?php echo esc_attr(!isset($provinces[$province_name]) ? $province_name : ''); ?>"
+                                class="regular-text"
+                                placeholder="Wpisz własną nazwę (np. Bayern, California)"
+                            />
+                        </div>
+                        
+                        <p class="description" style="margin-top: 10px;">
+                            <strong>⚠️ WAŻNE:</strong> Wszystkie artykuły będą dotyczyć TYLKO wybranego województwa!<br>
+                            <strong>Dla języka polskiego:</strong> Wybierz województwo z listy<br>
+                            <strong>Dla innych języków:</strong> Wybierz "Własna nazwa" i wpisz region (np. Bayern, California, Київська область)
                         </p>
                     </td>
                 </tr>
+                
+                <script>
+                jQuery(document).ready(function($) {
+                    $('#aicp_province_name').on('change', function() {
+                        if ($(this).val() === 'custom') {
+                            $('#custom_province_field').slideDown();
+                        } else {
+                            $('#custom_province_field').slideUp();
+                        }
+                    });
+                });
+                </script>
                 
                 <tr>
                     <th scope="row">

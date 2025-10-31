@@ -5,6 +5,36 @@ Wszystkie istotne zmiany w projekcie AI Content Publisher będą dokumentowane w
 Format oparty na [Keep a Changelog](https://keepachangelog.com/pl/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/lang/pl/).
 
+## [1.4.0] - 2025-10-31
+
+### Dodane
+- **🎯 Fokus na województwo - Artykuły WYŁĄCZNIE o wybranym regionie**
+  - Dropdown z listą wszystkich 16 polskich województw
+  - Opcja "Własna nazwa" dla języków obcych (niemiecki, angielski, ukraiński)
+  - Walidacja przed generowaniem - wymusza wybór województwa
+  - Komunikat błędu gdy województwo nie jest ustawione
+  
+### Zmienione
+- **Znacząco wzmocnione prompty AI** - artykuły MUSZĄ dotyczyć WYŁĄCZNIE wybranego województwa:
+  - Perplexity API: Szuka newsów TYLKO z wybranego województwa
+  - OpenAI API: Generuje artykuły WYŁĄCZNIE o wybranym województwie
+  - Wymóg 5-7 wzmianek o województwie (było 3)
+  - Zakaz pisania o innych województwach jako głównym temacie
+  - Wszystkie przykłady, dane, cytaty MUSZĄ być z wybranego województwa
+  - Jeśli informacje nie dotyczą wybranego województwa, AI ich NIE użyje
+- Zaktualizowano wszystkie prompty dla 4 języków (PL, DE, EN, UK)
+- Zmiana pola tekstowego na dropdown dla lepszej kontroli
+- Automatyczna obsługa custom regionu dla języków obcych
+
+### Cel aktualizacji
+- **100% trafność regionalną** - artykuły zawsze o właściwym województwie
+- Eliminacja treści o innych regionach
+- Lepsze pozycjonowanie lokalne w Google
+- Większe zaangażowanie lokalnej społeczności
+- Wyższa wartość dla lokalnych reklamodawców w AdSense
+
+---
+
 ## [1.3.0] - 2025-10-31
 
 ### Dodane
