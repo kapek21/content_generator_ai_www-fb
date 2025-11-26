@@ -4,7 +4,8 @@
 
 🌍 Obsługa 4 języków: Polski 🇵🇱, Niemiecki 🇩🇪, Angielski 🇬🇧, Ukraiński 🇺🇦  
 ⭐ **Zoptymalizowane dla Google AdSense** - artykuły premium o wysokiej wartości merytorycznej  
-🤖 **AI Search Ready** - pełna optymalizacja pod ChatGPT, Gemini, Perplexity (Schema.org, ALT, meta descriptions)
+🤖 **AI Search Ready** - pełna optymalizacja pod ChatGPT, Gemini, Perplexity (Schema.org, ALT, meta descriptions)  
+❓ **FAQ Schema.org** - automatyczne FAQ dla każdego artykułu (Google Featured Snippets)
 
 ## 📋 Spis treści
 
@@ -47,6 +48,12 @@ AI Content Publisher to zaawansowana wtyczka WordPress, która automatyzuje proc
   - **Lokalne słowa kluczowe** - wspominanie polityków, celebrytów, miast, wydarzeń
   - **AI fact-checking ready** - jasne stwierdzenia, strukturyzowane listy, pełne nazwy
   - Wsparcie dla Yoast SEO i Rank Math
+- ❓ **FAQ - Często zadawane pytania (v1.7.0)** - automatyczne dla każdego artykułu:
+  - **5-7 pytań z odpowiedziami** (50-100 słów każda)
+  - **LOKALNE pytania** - o województwo, miasta, wydarzenia, polityków
+  - **FAQ Schema.org (FAQPage)** - dla Google Featured Snippets
+  - **Mikrodata w HTML** - pełna integracja Schema.org
+  - Pytania w 4 językach (PL, DE, EN, UK)
 - ✅ **Automatyczne wyszukiwanie newsów** - Perplexity przeszukuje internet w poszukiwaniu najnowszych informacji
 - ✅ **Inteligentne generowanie treści** - GPT-4 tworzy artykuły analityczne klasy premium
 - ✅ **Generowanie obrazów AI** - DALL-E 3 tworzy unikalne obrazy dla każdego artykułu

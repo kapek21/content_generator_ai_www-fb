@@ -96,6 +96,15 @@ class AICP_Content_Generator {
         $result['steps'][] = 'Generowanie meta description...';
         $meta_description = $this->openai->generate_meta_description($article_excerpt, $this->province, $category->name, $this->language);
         
+        // Krok 3c: Wygeneruj FAQ (często zadawane pytania)
+        $result['steps'][] = 'Generowanie FAQ (często zadawane pytania)...';
+        $faq_data = $this->openai->generate_faq($article_title, $article_excerpt, $this->province, $category->name, $this->language);
+        
+        // Dodaj FAQ do artykułu (na końcu)
+        if (!empty($faq_data)) {
+            $article_html = $this->append_faq_to_article($article_html, $faq_data, $this->language);
+        }
+        
         // Pobierz i zapisz obraz w media library
         $image_id = $this->download_and_save_image($image_url, $article_title, $image_alt);
         
@@ -106,7 +115,8 @@ class AICP_Content_Generator {
             $article_html,
             $category_id,
             $image_id,
-            $meta_description
+            $meta_description,
+            $faq_data
         );
         
         $result['post_id'] = $post_id;
@@ -227,9 +237,42 @@ class AICP_Content_Generator {
     }
     
     /**
+     * Dodaje FAQ do artykułu w formacie HTML
+     */
+    private function append_faq_to_article($article_html, $faq_data, $language = 'pl') {
+        $headings = array(
+            'pl' => 'Często zadawane pytania (FAQ)',
+            'de' => 'Häufig gestellte Fragen (FAQ)',
+            'en' => 'Frequently Asked Questions (FAQ)',
+            'uk' => 'Часті питання (FAQ)'
+        );
+        
+        $heading = isset($headings[$language]) ? $headings[$language] : $headings['pl'];
+        
+        $faq_html = "\n\n<h2>{$heading}</h2>\n";
+        $faq_html .= '<div class="faq-section" itemscope itemtype="https://schema.org/FAQPage">' . "\n";
+        
+        foreach ($faq_data as $item) {
+            $question = htmlspecialchars($item['question'], ENT_QUOTES, 'UTF-8');
+            $answer = htmlspecialchars($item['answer'], ENT_QUOTES, 'UTF-8');
+            
+            $faq_html .= '<div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">' . "\n";
+            $faq_html .= '  <h3 itemprop="name"><strong>' . $question . '</strong></h3>' . "\n";
+            $faq_html .= '  <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">' . "\n";
+            $faq_html .= '    <p itemprop="text">' . $answer . '</p>' . "\n";
+            $faq_html .= '  </div>' . "\n";
+            $faq_html .= '</div>' . "\n";
+        }
+        
+        $faq_html .= '</div>' . "\n";
+        
+        return $article_html . $faq_html;
+    }
+    
+    /**
      * Tworzy wpis w WordPress
      */
-    private function create_wordpress_post($title, $content, $category_id, $featured_image_id, $meta_description = '') {
+    private function create_wordpress_post($title, $content, $category_id, $featured_image_id, $meta_description = '', $faq_data = array()) {
         // Usuń tag H1 z contentu (będzie użyty jako tytuł)
         $content = preg_replace('/<h1[^>]*>.*?<\/h1>/i', '', $content);
         
@@ -266,8 +309,8 @@ class AICP_Content_Generator {
             update_post_meta($post_id, '_aicp_meta_description', $meta_description);
         }
         
-        // Dodaj Schema.org JSON-LD dla AI Search
-        $this->add_schema_org_data($post_id, $title, $meta_description, $featured_image_id);
+        // Dodaj Schema.org JSON-LD dla AI Search (z FAQ jeśli są)
+        $this->add_schema_org_data($post_id, $title, $meta_description, $featured_image_id, $faq_data);
         
         return $post_id;
     }
@@ -275,7 +318,7 @@ class AICP_Content_Generator {
     /**
      * Dodaje Schema.org JSON-LD do wpisu (dla AI Search - ChatGPT, Gemini, Perplexity)
      */
-    private function add_schema_org_data($post_id, $title, $description, $image_id) {
+    private function add_schema_org_data($post_id, $title, $description, $image_id, $faq_data = array()) {
         $post_url = get_permalink($post_id);
         $post_date = get_the_date('c', $post_id);
         $post_modified = get_the_modified_date('c', $post_id);
@@ -375,6 +418,27 @@ class AICP_Content_Generator {
                 )
             )
         );
+        
+        // Dodaj FAQ Schema.org jeśli są pytania (dla Google Featured Snippets)
+        if (!empty($faq_data)) {
+            $faq_entities = array();
+            foreach ($faq_data as $item) {
+                $faq_entities[] = array(
+                    '@type' => 'Question',
+                    'name' => $item['question'],
+                    'acceptedAnswer' => array(
+                        '@type' => 'Answer',
+                        'text' => $item['answer']
+                    )
+                );
+            }
+            
+            $schema['@graph'][] = array(
+                '@type' => 'FAQPage',
+                '@id' => $post_url . '#faq',
+                'mainEntity' => $faq_entities
+            );
+        }
         
         // Zapisz jako meta field (zostanie wstawiony w <head> przez hook)
         update_post_meta($post_id, '_aicp_schema_org', wp_json_encode($schema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));

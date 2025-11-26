@@ -2,8 +2,8 @@
 /**
  * Plugin Name: AI Content Publisher
  * Plugin URI: https://twojadomena.pl
- * Description: Automatyczne generowanie i publikowanie PREMIUM artykułów WYŁĄCZNIE o wybranym województwie/regionie. Wsparcie dla wielu języków (PL, DE, EN, UK). Zoptymalizowane dla Google AdSense, SEO oraz AI Search (ChatGPT, Gemini, Perplexity).
- * Version: 1.6.0
+ * Description: Automatyczne generowanie i publikowanie PREMIUM artykułów WYŁĄCZNIE o wybranym województwie/regionie. Wsparcie dla wielu języków (PL, DE, EN, UK). Zoptymalizowane dla Google AdSense, SEO oraz AI Search (ChatGPT, Gemini, Perplexity). Z FAQ Schema.org dla Featured Snippets.
+ * Version: 1.7.0
  * Author: Twoja Nazwa
  * Author URI: https://twojadomena.pl
  * License: GPL2
@@ -16,7 +16,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Definicje stałych
-define('AICP_VERSION', '1.6.0');
+define('AICP_VERSION', '1.7.0');
 define('AICP_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('AICP_PLUGIN_URL', plugin_dir_url(__FILE__));
 

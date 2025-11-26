@@ -5,6 +5,38 @@ Wszystkie istotne zmiany w projekcie AI Content Publisher będą dokumentowane w
 Format oparty na [Keep a Changelog](https://keepachangelog.com/pl/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/lang/pl/).
 
+## [1.7.0] - 2025-11-26
+
+### Dodane
+- **❓ FAQ (Często zadawane pytania)** - automatycznie generowane dla każdego artykułu
+  - 5-7 pytań z odpowiedziami (50-100 słów każda)
+  - Pytania **ZAWSZE lokalne** - dotyczą województwa, miast, gmin, wydarzeń
+  - Pytania w stylu: "Co...?", "Jak...?", "Kiedy...?", "Dlaczego...?", "Gdzie w [województwo]...?"
+  - Odpowiedzi z konkretnymi danymi i informacjami
+  - **FAQ Schema.org (FAQPage)** - pełna integracja dla Google Featured Snippets
+  - Mikrodata w HTML (itemprop) dla lepszego crawlowania
+  - Optymalizacja pod Google Rich Results
+  - Wsparcie dla wszystkich 4 języków (PL, DE, EN, UK)
+
+### Zmienione
+- Proces generowania artykułu zawiera teraz dodatkowy krok: generowanie FAQ
+- Schema.org JSON-LD rozszerzony o FAQPage (dla Google Featured Snippets)
+- FAQ dodawane na końcu każdego artykułu jako osobna sekcja H2
+- Opis pluginu zaktualizowany o FAQ Schema.org
+
+### Techniczne
+- Dodano `generate_faq()` w `class-openai-api.php`
+- Dodano `append_faq_to_article()` w `class-content-generator.php`
+- Rozszerzono `add_schema_org_data()` o FAQ Schema.org (FAQPage)
+- FAQ generowane w formacie JSON, parsowane i formatowane do HTML
+- Mikrodata Schema.org dodane do HTML FAQ (itemscope, itemprop)
+
+### SEO/AI Search Benefits
+- 🎯 **Google Featured Snippets** - FAQ Schema.org zwiększa szanse na wyświetlenie w Featured Snippets
+- 🤖 **AI Search** - ChatGPT/Gemini/Perplexity mogą łatwo cytować FAQ
+- 📈 **Wyższa pozycja w SERP** - FAQ zwiększa zaangażowanie i czas na stronie
+- 🔍 **Long-tail keywords** - FAQ naturalnie zawiera lokalne pytania
+
 ## [1.6.0] - 2025-11-26
 
 ### Dodane

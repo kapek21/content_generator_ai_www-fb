@@ -226,6 +226,84 @@ class AICP_OpenAI_API {
     }
     
     /**
+     * Generuje FAQ dla artykułu (SEO + AI Search + Featured Snippets)
+     */
+    public function generate_faq($article_title, $article_excerpt, $province, $category_name, $language = 'pl') {
+        if (empty($this->api_key)) {
+            throw new Exception('Brak klucza API OpenAI');
+        }
+        
+        $templates = array(
+            'pl' => "Na podstawie artykułu o tytule '{$article_title}' (kategoria: {$category_name}, województwo: {$province}) napisz FAQ (często zadawane pytania).\n\n" .
+                   "Fragment artykułu:\n{$article_excerpt}\n\n" .
+                   "WYMAGANIA dla FAQ:\n" .
+                   "- 5-7 pytań z odpowiedziami\n" .
+                   "- Pytania MUSZĄ dotyczyć województwa '{$province}'\n" .
+                   "- Pytania w stylu: 'Co...?', 'Jak...?', 'Kiedy...?', 'Dlaczego...?', 'Gdzie w {$province}...?'\n" .
+                   "- Pytania lokalne: wspominaj miasta, gminy z '{$province}'\n" .
+                   "- Odpowiedzi: 50-100 słów, konkretne, z danymi\n" .
+                   "- Optymalizuj pod Google Featured Snippets\n" .
+                   "- Używaj pełnych nazw (nie skrótów)\n\n" .
+                   "Zwróć w formacie JSON:\n" .
+                   '{"faq": [{"question": "Pytanie 1?", "answer": "Odpowiedź 1..."}, {"question": "Pytanie 2?", "answer": "Odpowiedź 2..."}]}',
+            'de' => "Basierend auf dem Artikel mit dem Titel '{$article_title}' (Kategorie: {$category_name}, Bundesland: {$province}) schreibe FAQ (häufig gestellte Fragen).\n\n" .
+                   "Artikelauszug:\n{$article_excerpt}\n\n" .
+                   "FAQ-ANFORDERUNGEN:\n" .
+                   "- 5-7 Fragen mit Antworten\n" .
+                   "- Fragen MÜSSEN über '{$province}' sein\n" .
+                   "- Fragen im Stil: 'Was...?', 'Wie...?', 'Wann...?', 'Warum...?', 'Wo in {$province}...?'\n" .
+                   "- Lokale Fragen: erwähne Städte, Gemeinden aus '{$province}'\n" .
+                   "- Antworten: 50-100 Wörter, konkret, mit Daten\n" .
+                   "- Optimiere für Google Featured Snippets\n" .
+                   "- Verwende vollständige Namen (keine Abkürzungen)\n\n" .
+                   "Gib im JSON-Format zurück:\n" .
+                   '{"faq": [{"question": "Frage 1?", "answer": "Antwort 1..."}, {"question": "Frage 2?", "answer": "Antwort 2..."}]}',
+            'en' => "Based on the article titled '{$article_title}' (category: {$category_name}, region: {$province}) write FAQ (frequently asked questions).\n\n" .
+                   "Article excerpt:\n{$article_excerpt}\n\n" .
+                   "FAQ REQUIREMENTS:\n" .
+                   "- 5-7 questions with answers\n" .
+                   "- Questions MUST be about '{$province}'\n" .
+                   "- Questions in style: 'What...?', 'How...?', 'When...?', 'Why...?', 'Where in {$province}...?'\n" .
+                   "- Local questions: mention cities, municipalities from '{$province}'\n" .
+                   "- Answers: 50-100 words, specific, with data\n" .
+                   "- Optimize for Google Featured Snippets\n" .
+                   "- Use full names (no abbreviations)\n\n" .
+                   "Return in JSON format:\n" .
+                   '{"faq": [{"question": "Question 1?", "answer": "Answer 1..."}, {"question": "Question 2?", "answer": "Answer 2..."}]}',
+            'uk' => "На основі статті з назвою '{$article_title}' (категорія: {$category_name}, регіон: {$province}) напиши FAQ (часті питання).\n\n" .
+                   "Фрагмент статті:\n{$article_excerpt}\n\n" .
+                   "ВИМОГИ до FAQ:\n" .
+                   "- 5-7 питань з відповідями\n" .
+                   "- Питання ПОВИННІ стосуватися '{$province}'\n" .
+                   "- Питання в стилі: 'Що...?', 'Як...?', 'Коли...?', 'Чому...?', 'Де в {$province}...?'\n" .
+                   "- Локальні питання: згадуй міста, громади з '{$province}'\n" .
+                   "- Відповіді: 50-100 слів, конкретні, з даними\n" .
+                   "- Оптимізуй під Google Featured Snippets\n" .
+                   "- Використовуй повні назви (не скорочення)\n\n" .
+                   "Поверни у форматі JSON:\n" .
+                   '{"faq": [{"question": "Питання 1?", "answer": "Відповідь 1..."}, {"question": "Питання 2?", "answer": "Відповідь 2..."}]}'
+        );
+        
+        $prompt = isset($templates[$language]) ? $templates[$language] : $templates['pl'];
+        $faq_json = $this->chat($prompt, 'gpt-4o-mini', null, 800);
+        
+        // Wyczyść markdown code blocks jeśli są
+        $faq_json = preg_replace('/```json\s*|\s*```/', '', $faq_json);
+        $faq_json = trim($faq_json);
+        
+        // Parsuj JSON
+        $faq_data = json_decode($faq_json, true);
+        
+        if (json_last_error() !== JSON_ERROR_NONE || !isset($faq_data['faq'])) {
+            // Jeśli parsing się nie powiódł, zwróć pustą tablicę
+            error_log('AICP: Błąd parsowania FAQ JSON: ' . json_last_error_msg());
+            return array();
+        }
+        
+        return $faq_data['faq'];
+    }
+    
+    /**
      * Uniwersalna funkcja chat
      */
     private function chat($message, $model = 'gpt-4o-mini', $system_prompt = null, $max_tokens = 2000) {

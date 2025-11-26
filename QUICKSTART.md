@@ -171,6 +171,14 @@ Każdy wygenerowany artykuł zawiera teraz:
 - ✅ Strukturyzowane dane dla AI fact-checking
 - ✅ Wsparcie dla Yoast SEO i Rank Math
 
+**❓ Nowe w v1.7.0 - FAQ (Często zadawane pytania):**
+Każdy artykuł zawiera teraz automatycznie wygenerowane FAQ:
+- ✅ 5-7 pytań z odpowiedziami (LOKALNE - o województwie, miastach, wydarzeniach)
+- ✅ FAQ Schema.org (FAQPage) - dla Google Featured Snippets
+- ✅ Mikrodata w HTML - pełna integracja Schema.org
+- ✅ Odpowiedzi 50-100 słów, konkretne, z danymi
+- ✅ Zwiększona szansa na wyświetlenie w Google Rich Results
+
 ---
 
 ## 🔄 Częstotliwość publikacji (ważne!)
