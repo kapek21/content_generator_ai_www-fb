@@ -5,7 +5,8 @@
 🌍 Obsługa 4 języków: Polski 🇵🇱, Niemiecki 🇩🇪, Angielski 🇬🇧, Ukraiński 🇺🇦  
 ⭐ **Zoptymalizowane dla Google AdSense** - artykuły premium o wysokiej wartości merytorycznej  
 🤖 **AI Search Ready** - pełna optymalizacja pod ChatGPT, Gemini, Perplexity (Schema.org, ALT, meta descriptions)  
-❓ **FAQ Schema.org** - automatyczne FAQ dla każdego artykułu (Google Featured Snippets)
+❓ **FAQ Schema.org** - automatyczne FAQ dla każdego artykułu (Google Featured Snippets)  
+📱 **Google Discover Optimized** - obrazy HD 1792x1024, meta tagi, storytelling z emocjami
 
 ## 📋 Spis treści
 
@@ -54,6 +55,13 @@ AI Content Publisher to zaawansowana wtyczka WordPress, która automatyzuje proc
   - **FAQ Schema.org (FAQPage)** - dla Google Featured Snippets
   - **Mikrodata w HTML** - pełna integracja Schema.org
   - Pytania w 4 językach (PL, DE, EN, UK)
+- 📱 **Google Discover Optimization (v1.8.0)** - pełna optymalizacja pod Google Discover:
+  - **Obrazy HD (1792x1024px)** - panoramiczny format, jakość HD (DALL-E 3)
+  - **Meta tagi Discover** - max-image-preview:large, article tags, Open Graph
+  - **Storytelling z emocjami** - radość, nadzieja, zaskoczenie, troska
+  - **Ludzie w treściach** - mieszkańcy, lokalni bohaterowie, zwykli ludzie
+  - **Angażujące tytuły i leady** - od razu przyciągają uwagę
+  - **Twitter Card** - summary_large_image dla lepszego udostępniania
 - ✅ **Automatyczne wyszukiwanie newsów** - Perplexity przeszukuje internet w poszukiwaniu najnowszych informacji
 - ✅ **Inteligentne generowanie treści** - GPT-4 tworzy artykuły analityczne klasy premium
 - ✅ **Generowanie obrazów AI** - DALL-E 3 tworzy unikalne obrazy dla każdego artykułu

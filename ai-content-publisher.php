@@ -2,8 +2,8 @@
 /**
  * Plugin Name: AI Content Publisher
  * Plugin URI: https://twojadomena.pl
- * Description: Automatyczne generowanie i publikowanie PREMIUM artykułów WYŁĄCZNIE o wybranym województwie/regionie. Wsparcie dla wielu języków (PL, DE, EN, UK). Zoptymalizowane dla Google AdSense, SEO oraz AI Search (ChatGPT, Gemini, Perplexity). Z FAQ Schema.org dla Featured Snippets.
- * Version: 1.7.0
+ * Description: Automatyczne generowanie i publikowanie PREMIUM artykułów WYŁĄCZNIE o wybranym województwie/regionie. Wsparcie dla wielu języków (PL, DE, EN, UK). Zoptymalizowane dla Google AdSense, SEO, AI Search (ChatGPT, Gemini, Perplexity) oraz Google Discover. Z FAQ Schema.org dla Featured Snippets.
+ * Version: 1.8.0
  * Author: Twoja Nazwa
  * Author URI: https://twojadomena.pl
  * License: GPL2
@@ -16,7 +16,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Definicje stałych
-define('AICP_VERSION', '1.7.0');
+define('AICP_VERSION', '1.8.0');
 define('AICP_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('AICP_PLUGIN_URL', plugin_dir_url(__FILE__));
 
@@ -51,6 +51,9 @@ class AI_Content_Publisher {
         
         // Schema.org JSON-LD dla AI Search (ChatGPT, Gemini, Perplexity)
         add_action('wp_head', array($this, 'output_schema_org'));
+        
+        // Google Discover meta tags
+        add_action('wp_head', array($this, 'output_discover_meta_tags'));
         
         // Aktywacja/deaktywacja
         register_activation_hook(__FILE__, array($this, 'activate'));
@@ -594,6 +597,49 @@ class AI_Content_Publisher {
             echo '<script type="application/ld+json">' . "\n";
             echo $schema_json . "\n";
             echo '</script>' . "\n";
+        }
+    }
+    
+    /**
+     * Wyświetla meta tagi dla Google Discover
+     */
+    public function output_discover_meta_tags() {
+        if (!is_single()) {
+            return;
+        }
+        
+        $post_id = get_the_ID();
+        $is_aicp_generated = get_post_meta($post_id, '_aicp_generated', true);
+        
+        // Tylko dla artykułów wygenerowanych przez AICP
+        if ($is_aicp_generated) {
+            echo "\n<!-- AI Content Publisher - Google Discover Optimization -->\n";
+            
+            // Max image preview - pozwala Google wyświetlać duże obrazy w Discover
+            echo '<meta name="robots" content="max-image-preview:large, max-snippet:-1, max-video-preview:-1">' . "\n";
+            
+            // Article meta tags dla lepszego rozpoznawania przez Discover
+            echo '<meta property="article:published_time" content="' . esc_attr(get_the_date('c', $post_id)) . '">' . "\n";
+            echo '<meta property="article:modified_time" content="' . esc_attr(get_the_modified_date('c', $post_id)) . '">' . "\n";
+            
+            $province = get_post_meta($post_id, '_aicp_province', true);
+            if ($province) {
+                echo '<meta property="article:tag" content="' . esc_attr($province) . '">' . "\n";
+            }
+            
+            // Open Graph dla lepszego udostępniania (również pomaga w Discover)
+            $meta_desc = get_post_meta($post_id, '_aicp_meta_description', true);
+            if ($meta_desc) {
+                echo '<meta property="og:description" content="' . esc_attr($meta_desc) . '">' . "\n";
+            }
+            
+            echo '<meta property="og:type" content="article">' . "\n";
+            echo '<meta property="og:locale" content="' . esc_attr(get_locale()) . '">' . "\n";
+            
+            // Twitter Card dla lepszego wyświetlania
+            echo '<meta name="twitter:card" content="summary_large_image">' . "\n";
+            
+            echo "<!-- End Google Discover Optimization -->\n";
         }
     }
 }

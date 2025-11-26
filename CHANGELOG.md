@@ -5,6 +5,54 @@ Wszystkie istotne zmiany w projekcie AI Content Publisher będą dokumentowane w
 Format oparty na [Keep a Changelog](https://keepachangelog.com/pl/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/lang/pl/).
 
+## [1.8.0] - 2025-11-26
+
+### Dodane
+- **📱 Google Discover Optimization** - pełna optymalizacja pod Google Discover
+  - **Większe obrazy HD (1792x1024px)** - panoramiczny format dla lepszego wyświetlania w Discover
+  - **Jakość HD** - obrazy w jakości HD zamiast standard
+  - **Meta tag max-image-preview:large** - pozwala Google wyświetlać duże obrazy w Discover
+  - **Meta tagi Article** - article:published_time, article:modified_time, article:tag
+  - **Open Graph tags** - og:description, og:type, og:locale
+  - **Twitter Card** - summary_large_image dla lepszego udostępniania
+  - **Max-snippet:-1** - pozwala Google wyświetlać pełne fragmenty treści
+  - **Max-video-preview:-1** - dla przyszłych wideo
+
+### Zmienione
+- **Prompty storytelling wzmocnione o elementy dla Google Discover:**
+  - Wymaganie używania **EMOCJI** (radość, nadzieja, zaskoczenie, troska)
+  - Wymaganie opisywania **LUDZI** (mieszkańcy, lokalni bohaterowie, zwykli ludzie)
+  - **TYTUŁ musi być angażujący i wartościowy** (dla Google Discover)
+  - **LEAD (pierwsze 2-3 zdania) musi od razu przyciągać uwagę**
+  - Dodano te wymagania dla wszystkich 4 języków (PL, DE, EN, UK)
+
+- **Rozmiar obrazków:**
+  - Zmieniony z 1024x1024 (kwadrat) na **1792x1024 (panoramiczny/landscape)**
+  - Google Discover wymaga minimum 1200px szerokości - teraz spełnione
+  - Format panoramiczny lepiej wyświetla się na telefonach w Discover
+
+- **Jakość obrazków:**
+  - Zmieniona z 'standard' na **'hd'** (DALL-E 3 HD quality)
+  - Lepsze obrazy = lepsza pozycja w Google Discover
+
+### Techniczne
+- Dodano `output_discover_meta_tags()` w `ai-content-publisher.php` (hook: wp_head)
+- Rozszerzono req7 (STORYTELLING) o wymagania dla Google Discover
+- DALL-E 3: size zmieniony na '1792x1024', quality na 'hd'
+- Meta tagi dodawane tylko dla artykułów wygenerowanych przez AICP (_aicp_generated)
+
+### Google Discover Benefits
+- 🎯 **Zwiększona widoczność w Google Discover** - dzięki większym obrazom HD i meta tagom
+- 📱 **Lepsze wyświetlanie na mobile** - panoramiczne obrazy idealnie pasują
+- 👥 **Więcej kliknięć** - emocjonalne, angażujące tytuły i leady
+- 📈 **Wyższy CTR** - storytelling z ludźmi i emocjami
+- 🚀 **Lepsza pozycja w Discover feed** - pełna optymalizacja meta tagów
+
+### Uwaga
+⚠️ **Wyższy koszt generowania obrazów** - obrazy HD w rozmiarze 1792x1024 kosztują więcej niż standard 1024x1024. 
+Koszt pojedynczego obrazu HD: ~$0.08-0.12 (było ~$0.04).
+Łączny koszt artykułu wzrasta o ~$0.04-0.08 (ale zyskujesz lepszą pozycję w Google Discover!).
+
 ## [1.7.0] - 2025-11-26
 
 ### Dodane

@@ -179,6 +179,15 @@ Każdy artykuł zawiera teraz automatycznie wygenerowane FAQ:
 - ✅ Odpowiedzi 50-100 słów, konkretne, z danymi
 - ✅ Zwiększona szansa na wyświetlenie w Google Rich Results
 
+**📱 Nowe w v1.8.0 - Google Discover Optimization:**
+Wszystkie artykuły są teraz w pełni zoptymalizowane pod Google Discover:
+- ✅ **Obrazy HD (1792x1024px)** - panoramiczny format, jakość HD
+- ✅ **Meta tagi Discover** - max-image-preview:large, article tags, Open Graph
+- ✅ **Storytelling z emocjami** - treści z radością, nadzieją, zaskoczeniem
+- ✅ **Ludzie w treściach** - mieszkańcy, lokalni bohaterowie
+- ✅ **Angażujące tytuły** - od razu przyciągają uwagę w Discover feed
+- ⚠️ **Uwaga:** Obrazy HD kosztują więcej (~$0.08 vs ~$0.04), ale dają lepszą pozycję w Discover!
+
 ---
 
 ## 🔄 Częstotliwość publikacji (ważne!)
