@@ -2,8 +2,8 @@
 /**
  * Plugin Name: AI Content Publisher
  * Plugin URI: https://twojadomena.pl
- * Description: Automatyczne generowanie i publikowanie PREMIUM artykułów WYŁĄCZNIE o wybranym województwie/regionie. Wsparcie dla wielu języków (PL, DE, EN, UK). Zoptymalizowane dla Google AdSense.
- * Version: 1.5.0
+ * Description: Automatyczne generowanie i publikowanie PREMIUM artykułów WYŁĄCZNIE o wybranym województwie/regionie. Wsparcie dla wielu języków (PL, DE, EN, UK). Zoptymalizowane dla Google AdSense, SEO oraz AI Search (ChatGPT, Gemini, Perplexity).
+ * Version: 1.6.0
  * Author: Twoja Nazwa
  * Author URI: https://twojadomena.pl
  * License: GPL2
@@ -16,7 +16,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Definicje stałych
-define('AICP_VERSION', '1.5.0');
+define('AICP_VERSION', '1.6.0');
 define('AICP_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('AICP_PLUGIN_URL', plugin_dir_url(__FILE__));
 
@@ -48,6 +48,9 @@ class AI_Content_Publisher {
         
         // Cron dla automatycznego generowania
         add_action('aicp_auto_generate_event', array($this, 'auto_generate_content'));
+        
+        // Schema.org JSON-LD dla AI Search (ChatGPT, Gemini, Perplexity)
+        add_action('wp_head', array($this, 'output_schema_org'));
         
         // Aktywacja/deaktywacja
         register_activation_hook(__FILE__, array($this, 'activate'));
@@ -573,6 +576,25 @@ class AI_Content_Publisher {
             'uk' => 'ukraińskim'
         );
         return isset($names[$lang_code]) ? $names[$lang_code] : 'polskim';
+    }
+    
+    /**
+     * Wyświetla Schema.org JSON-LD w <head> (dla AI Search - ChatGPT, Gemini, Perplexity)
+     */
+    public function output_schema_org() {
+        if (!is_single()) {
+            return;
+        }
+        
+        $post_id = get_the_ID();
+        $schema_json = get_post_meta($post_id, '_aicp_schema_org', true);
+        
+        if (!empty($schema_json)) {
+            echo "\n<!-- AI Content Publisher - Schema.org JSON-LD (AI Search Optimization) -->\n";
+            echo '<script type="application/ld+json">' . "\n";
+            echo $schema_json . "\n";
+            echo '</script>' . "\n";
+        }
     }
 }
 

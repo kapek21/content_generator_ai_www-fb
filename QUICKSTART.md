@@ -162,6 +162,15 @@ Następnie w WordPress:
 
 🎉 **Gratulacje!** Właśnie wygenerowałeś pierwszy artykuł AI!
 
+**🤖 Nowe w v1.6.0 - AI Search Optimization:**
+Każdy wygenerowany artykuł zawiera teraz:
+- ✅ Schema.org JSON-LD (dla ChatGPT, Gemini, Perplexity)
+- ✅ Zoptymalizowane opisy ALT dla obrazków (SEO + AI Search)
+- ✅ Meta descriptions (150-160 znaków, gotowe pod Google i AI)
+- ✅ Lokalne słowa kluczowe (politycy, celebryci, miasta, wydarzenia)
+- ✅ Strukturyzowane dane dla AI fact-checking
+- ✅ Wsparcie dla Yoast SEO i Rank Math
+
 ---
 
 ## 🔄 Częstotliwość publikacji (ważne!)

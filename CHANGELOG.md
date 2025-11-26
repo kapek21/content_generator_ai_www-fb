@@ -5,6 +5,49 @@ Wszystkie istotne zmiany w projekcie AI Content Publisher będą dokumentowane w
 Format oparty na [Keep a Changelog](https://keepachangelog.com/pl/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/lang/pl/).
 
+## [1.6.0] - 2025-11-26
+
+### Dodane
+- **🤖 Pełna optymalizacja pod AI Search (ChatGPT, Gemini, Perplexity)**
+  - Automatyczne generowanie opisów ALT dla obrazków (SEO + AI Search)
+  - Automatyczne generowanie meta description (150-160 znaków, zoptymalizowane)
+  - Schema.org JSON-LD structured data (NewsArticle + WebPage + BreadcrumbList)
+  - Wsparcie dla wtyczek SEO: Yoast SEO, Rank Math
+  
+- **📍 Wzmocnione lokalne pozycjonowanie**
+  - Prompty zawierają wymaganie wspominania lokalnych polityków, celebrytów
+  - Wymuszenie używania konkretnych nazw miast, gmin, powiatów z województwa
+  - Wspominanie lokalnych wydarzeń, festiwali, firm, inwestycji
+  - Używanie lokalnych słów kluczowych: "aktualności [województwo]", "wiadomości [województwo]"
+  - Lokalne określenia geograficzne (rzeki, góry, dzielnice)
+  
+- **🎯 Optymalizacja treści pod AI fact-checking**
+  - Wymaganie używania jasnych, jednoznacznych stwierdzeń
+  - Dodawanie konkretnych faktów które AI będzie mogła zacytować
+  - Strukturyzacja informacji - wymaganie używania list (ul/ol)
+  - Pełne nazwy zamiast skrótów (np. "województwo mazowieckie" zamiast "woj. maz.")
+  - Używanie pełnych fraz pytających (Kto? Co? Gdzie? Kiedy? Dlaczego?)
+
+### Zmienione
+- **Wymagania dla artykułów (wszystkie języki: PL, DE, EN, UK)**:
+  - req5: Dodano wymaganie lokalnych elementów (politycy, celebryci, miasta, gminy, wydarzenia, firmy)
+  - req8: Przekształcono z "SEO i AdSense" na "SEO i AI Search" z konkretnymi wymaganiami
+  - req9: Przekształcono z "Unikalne elementy" na "Lokalne słowa kluczowe" z wymaganiami pozycjonowania
+  - req10: Nowy punkt "Unikalne elementy" (przeniesione z req9)
+  
+- Funkcja `download_and_save_image()` zapisuje ALT text do obrazka
+- Funkcja `create_wordpress_post()` zapisuje meta description dla wtyczek SEO
+- Opis pluginu zaktualizowany o wsparcie dla AI Search
+
+### Techniczne
+- Dodano `generate_image_alt_text()` w `class-openai-api.php`
+- Dodano `generate_meta_description()` w `class-openai-api.php`
+- Dodano `add_schema_org_data()` w `class-content-generator.php`
+- Dodano `output_schema_org()` w `ai-content-publisher.php` (hook: wp_head)
+- Meta fields: `_aicp_meta_description`, `_aicp_schema_org`, `_wp_attachment_image_alt`
+- Wsparcie dla Yoast SEO: `_yoast_wpseo_metadesc`
+- Wsparcie dla Rank Math: `rank_math_description`
+
 ## [1.5.0] - 2025-11-01
 
 ### Dodane

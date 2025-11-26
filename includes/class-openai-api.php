@@ -105,6 +105,127 @@ class AICP_OpenAI_API {
     }
     
     /**
+     * Generuje opis ALT dla obrazka (SEO + AI Search optimized)
+     */
+    public function generate_image_alt_text($article_title, $category_name, $province, $language = 'pl') {
+        if (empty($this->api_key)) {
+            throw new Exception('Brak klucza API OpenAI');
+        }
+        
+        $templates = array(
+            'pl' => "Napisz SZCZEGÓŁOWY opis ALT dla obrazka artykułu o tytule: '{$article_title}' (kategoria: {$category_name}, województwo: {$province}).\n\n" .
+                   "WYMAGANIA dla ALT:\n" .
+                   "- Długość: 100-150 znaków\n" .
+                   "- Zawrzyj: województwo '{$province}', kategorię '{$category_name}'\n" .
+                   "- Użyj lokalnych słów kluczowych (miasto, gmina, region)\n" .
+                   "- Opisz CO jest na obrazku w kontekście lokalnym\n" .
+                   "- Optymalizuj pod Google Images i AI Search\n" .
+                   "- Bez słowa 'obrazek', 'zdjęcie', 'ilustracja'\n\n" .
+                   "Zwróć TYLKO tekst ALT, bez cudzysłowów.",
+            'de' => "Schreibe eine DETAILLIERTE ALT-Beschreibung für ein Bild zum Artikel: '{$article_title}' (Kategorie: {$category_name}, Bundesland: {$province}).\n\n" .
+                   "ANFORDERUNGEN für ALT:\n" .
+                   "- Länge: 100-150 Zeichen\n" .
+                   "- Enthalte: Bundesland '{$province}', Kategorie '{$category_name}'\n" .
+                   "- Verwende lokale Schlüsselwörter (Stadt, Gemeinde, Region)\n" .
+                   "- Beschreibe WAS auf dem Bild im lokalen Kontext ist\n" .
+                   "- Optimiere für Google Images und AI Search\n" .
+                   "- Ohne Wort 'Bild', 'Foto', 'Illustration'\n\n" .
+                   "Gib NUR den ALT-Text zurück, ohne Anführungszeichen.",
+            'en' => "Write a DETAILED ALT description for an article image titled: '{$article_title}' (category: {$category_name}, region: {$province}).\n\n" .
+                   "ALT REQUIREMENTS:\n" .
+                   "- Length: 100-150 characters\n" .
+                   "- Include: region '{$province}', category '{$category_name}'\n" .
+                   "- Use local keywords (city, municipality, region)\n" .
+                   "- Describe WHAT is in the image in local context\n" .
+                   "- Optimize for Google Images and AI Search\n" .
+                   "- Without words 'image', 'photo', 'illustration'\n\n" .
+                   "Return ONLY the ALT text, no quotes.",
+            'uk' => "Напиши ДЕТАЛЬНИЙ опис ALT для зображення статті: '{$article_title}' (категорія: {$category_name}, регіон: {$province}).\n\n" .
+                   "ВИМОГИ до ALT:\n" .
+                   "- Довжина: 100-150 символів\n" .
+                   "- Включи: регіон '{$province}', категорію '{$category_name}'\n" .
+                   "- Використай локальні ключові слова (місто, громада, регіон)\n" .
+                   "- Опиши ЩО на зображенні в локальному контексті\n" .
+                   "- Оптимізуй під Google Images та AI Search\n" .
+                   "- Без слів 'зображення', 'фото', 'ілюстрація'\n\n" .
+                   "Поверни ТІЛЬКИ текст ALT, без лапок."
+        );
+        
+        $prompt = isset($templates[$language]) ? $templates[$language] : $templates['pl'];
+        $alt_text = $this->chat($prompt, 'gpt-4o-mini', null, 200);
+        
+        // Oczyść z ewentualnych cudzysłowów
+        $alt_text = trim($alt_text, '"\'');
+        
+        return $alt_text;
+    }
+    
+    /**
+     * Generuje meta description (SEO + AI Search optimized)
+     */
+    public function generate_meta_description($article_excerpt, $province, $category_name, $language = 'pl') {
+        if (empty($this->api_key)) {
+            throw new Exception('Brak klucza API OpenAI');
+        }
+        
+        $templates = array(
+            'pl' => "Na podstawie fragmentu artykułu napisz IDEALNĄ meta description dla SEO i AI Search:\n\n" .
+                   "Fragment: {$article_excerpt}\n\n" .
+                   "WYMAGANIA:\n" .
+                   "- Długość: 150-160 znaków (ściśle!)\n" .
+                   "- MUSISZ zawrzeć: województwo '{$province}'\n" .
+                   "- Zawrzyj: kategorię '{$category_name}' lub synonimy\n" .
+                   "- Użyj call-to-action (Dowiedz się, Zobacz, Sprawdź)\n" .
+                   "- Optymalizuj pod Google i ChatGPT/Gemini\n" .
+                   "- Angażująca, zachęcająca do kliknięcia\n\n" .
+                   "Zwróć TYLKO meta description, bez cudzysłowów.",
+            'de' => "Schreibe basierend auf dem Artikelauszug die PERFEKTE Meta-Description für SEO und AI Search:\n\n" .
+                   "Auszug: {$article_excerpt}\n\n" .
+                   "ANFORDERUNGEN:\n" .
+                   "- Länge: 150-160 Zeichen (streng!)\n" .
+                   "- MUSS enthalten: Bundesland '{$province}'\n" .
+                   "- Enthalte: Kategorie '{$category_name}' oder Synonyme\n" .
+                   "- Verwende Call-to-Action (Erfahren Sie, Sehen Sie, Prüfen Sie)\n" .
+                   "- Optimiere für Google und ChatGPT/Gemini\n" .
+                   "- Ansprechend, zum Klicken anregend\n\n" .
+                   "Gib NUR die Meta-Description zurück, ohne Anführungszeichen.",
+            'en' => "Based on the article excerpt, write the PERFECT meta description for SEO and AI Search:\n\n" .
+                   "Excerpt: {$article_excerpt}\n\n" .
+                   "REQUIREMENTS:\n" .
+                   "- Length: 150-160 characters (strictly!)\n" .
+                   "- MUST include: region '{$province}'\n" .
+                   "- Include: category '{$category_name}' or synonyms\n" .
+                   "- Use call-to-action (Learn, See, Check, Discover)\n" .
+                   "- Optimize for Google and ChatGPT/Gemini\n" .
+                   "- Engaging, encouraging clicks\n\n" .
+                   "Return ONLY the meta description, no quotes.",
+            'uk' => "На основі фрагмента статті напиши ІДЕАЛЬНИЙ мета-опис для SEO та AI Search:\n\n" .
+                   "Фрагмент: {$article_excerpt}\n\n" .
+                   "ВИМОГИ:\n" .
+                   "- Довжина: 150-160 символів (строго!)\n" .
+                   "- ПОВИНЕН містити: регіон '{$province}'\n" .
+                   "- Включи: категорію '{$category_name}' або синоніми\n" .
+                   "- Використай заклик до дії (Дізнайся, Подивись, Перевір)\n" .
+                   "- Оптимізуй під Google та ChatGPT/Gemini\n" .
+                   "- Захоплююча, що заохочує клікнути\n\n" .
+                   "Поверни ТІЛЬКИ мета-опис, без лапок."
+        );
+        
+        $prompt = isset($templates[$language]) ? $templates[$language] : $templates['pl'];
+        $meta_desc = $this->chat($prompt, 'gpt-4o-mini', null, 200);
+        
+        // Oczyść z ewentualnych cudzysłowów
+        $meta_desc = trim($meta_desc, '"\'');
+        
+        // Ogranicz do 160 znaków jeśli za długie
+        if (mb_strlen($meta_desc) > 160) {
+            $meta_desc = mb_substr($meta_desc, 0, 157) . '...';
+        }
+        
+        return $meta_desc;
+    }
+    
+    /**
      * Uniwersalna funkcja chat
      */
     private function chat($message, $model = 'gpt-4o-mini', $system_prompt = null, $max_tokens = 2000) {
@@ -204,11 +325,12 @@ class AICP_OpenAI_API {
                 'req2' => "2. LOKALIZACJA - NAJWAŻNIEJSZE!!:\n   - Artykuł MUSI dotyczyć WYŁĄCZNIE województwa '{$province}'\n   - Nazwa '{$province}' musi pojawić się 5-7 razy w tekście\n   - Wszystkie przykłady, wydarzenia, dane MUSZĄ być z województwa '{$province}'\n   - Cytuj osoby/firmy/instytucje z województwa '{$province}'\n   - Porównuj z innymi województwami, ale koncentruj się TYLKO na '{$province}'\n   - NIE pisz o innych województwach jako głównym temacie\n   - Jeśli informacje nie dotyczą '{$province}', NIE używaj ich!\n\n",
                 'req3' => "3. SŁOWA KLUCZOWE: Wpleć organicznie następujące frazy: %s (używaj synonimów i pokrewnych terminów)\n",
                 'req4' => "4. STRUKTURA PREMIUM:\n   - Tytuł (H1): Konkretny, angażujący, bez clickbaitu\n   - Lead (2-3 akapity): Wprowadzenie z kluczowymi informacjami\n   - 4-6 sekcji merytorycznych (H2): Każda z analizą przyczyn-skutków\n   - Podsekcje (H3) tam gdzie potrzebne: Dla większej szczegółowości\n   - Podsumowanie z przewidywaniami lub rekomendacjami\n\n",
-                'req5' => "5. WARTOŚĆ MERYTORYCZNA:\n   - Używaj KONKRETNYCH liczb, danych, statystyk (np. kwoty, procenty, daty)\n   - Cytuj ekspertów lub przedstawicieli instytucji (prawdziwe imiona i stanowiska)\n   - Analizuj PRZYCZYNY i SKUTKI wydarzeń\n   - Dodaj KONTEKST historyczny lub porównania z innymi regionami\n   - Przedstaw różne PERSPEKTYWY (władze, mieszkańcy, eksperci)\n\n",
+                'req5' => "5. WARTOŚĆ MERYTORYCZNA I LOKALNE ELEMENTY:\n   - Używaj KONKRETNYCH liczb, danych, statystyk (np. kwoty, procenty, daty)\n   - Cytuj LOKALNYCH ekspertów, polityków, celebrytów z województwa '{$province}' (prawdziwe imiona i stanowiska)\n   - Wymień konkretne MIASTA, GMINY z województwa '{$province}'\n   - Wspomniej LOKALNYCH POLITYKÓW (marszałek, wojewoda, burmistrzowie, radni)\n   - Wspomniej LOKALNE WYDARZENIA, festiwale, uroczystości w '{$province}'\n   - Wspomniej LOKALNE FIRMY, inwestycje, projekty w '{$province}'\n   - Analizuj PRZYCZYNY i SKUTKI wydarzeń dla mieszkańców '{$province}'\n   - Dodaj KONTEKST historyczny lub porównania z innymi regionami\n   - Przedstaw różne PERSPEKTYWY (władze lokalne, mieszkańcy, eksperci regionalni)\n\n",
                 'req6' => "6. JAKOŚĆ JĘZYKOWA:\n   - Używaj BOGATEGO słownictwa (synonimy, profesjonalne terminy)\n   - Unikaj powtórzeń - każdy akapit wnosi nową wartość\n   - Stosuj precyzyjne określenia zamiast ogólników\n   - Łącz fakty z narracją (storytelling z danymi)\n\n",
                 'req7' => "7. STORYTELLING:\n   - Rozpocznij od konkretnego przykładu, sytuacji lub wydarzenia\n   - Pokaż wpływ na życie mieszkańców (humanizuj treść)\n   - Dodaj mikrohistorie lub case studies\n   - Zakończ wizją przyszłości lub wnioskami\n\n",
-                'req8' => "8. OPTYMALIZACJA SEO I ADSENSE:\n   - Naturalne rozmieszczenie słów kluczowych (nie forsuj)\n   - Długie akapity (3-5 zdań) dla lepszej czytelności\n   - Używaj pytań retorycznych angażujących czytelnika\n   - Dodaj wewnętrzne linkowanie (gdzie stosowne)\n   - ZERO clickbaitu, sensacji, fake newsów\n\n",
-                'req9' => "9. UNIKALNE ELEMENTY:\n   - Twoja własna analiza i interpretacja faktów\n   - Porównania międzyregionalne lub międzynarodowe\n   - Prognozy lub rekomendacje oparte na danych\n   - Wskazanie implikacji dla różnych grup (mieszkańcy, firmy, samorząd)\n\n",
+                'req8' => "8. OPTYMALIZACJA SEO I AI SEARCH (ChatGPT, Gemini, Perplexity):\n   - Naturalne rozmieszczenie słów kluczowych (nie forsuj)\n   - Długie akapity (3-5 zdań) dla lepszej czytelności\n   - Używaj pytań retorycznych angażujących czytelnika\n   - Strukturyzuj informacje - używaj list (ul/ol) tam gdzie możliwe\n   - Dodaj KONKRETNE FAKTY które AI będzie mogła zacytować\n   - Używaj jasnych, jednoznacznych stwierdzeń (dla AI fact-checking)\n   - Dodaj pełne nazwy (nie skróty) - np. 'województwo mazowieckie' zamiast 'woj. maz.'\n   - ZERO clickbaitu, sensacji, fake newsów\n\n",
+                'req9' => "9. LOKALNE SŁOWA KLUCZOWE (dla pozycjonowania lokalnego):\n   - Używaj nazw: miasta, gminy, powiaty z '{$province}'\n   - Wspominaj: 'aktualności {$province}', 'wiadomości {$province}', 'wydarzenia {$province}'\n   - Dodaj: 'samorząd {$province}', 'inwestycje w {$province}'\n   - Jeśli są plotki/celebryci lokalni - wspomniej ich\n   - Używaj lokalnych określeń geograficznych (rzeki, góry, dzielnice)\n   - Dla lepszego AI Search: używaj pełnych fraz pytających (Kto? Co? Gdzie? Kiedy? Dlaczego?)\n\n",
+                'req10' => "10. UNIKALNE ELEMENTY:\n   - Twoja własna analiza i interpretacja faktów\n   - Porównania międzyregionalne lub międzynarodowe\n   - Prognozy lub rekomendacje oparte na danych\n   - Wskazanie implikacji dla różnych grup (mieszkańcy, firmy, samorząd lokalny)\n\n",
                 'format' => "Zwróć artykuł w formacie HTML z odpowiednimi tagami (h1, h2, h3, p, strong, em). Użyj <strong> dla kluczowych informacji i <em> dla akcentów."
             ),
             'de' => array(
@@ -219,11 +341,12 @@ class AICP_OpenAI_API {
                 'req2' => "2. LOKALISIERUNG - AM WICHTIGSTEN!!:\n   - Der Artikel MUSS AUSSCHLIESSLICH über '{$province}' handeln\n   - Der Name '{$province}' muss 5-7 Mal im Text erscheinen\n   - Alle Beispiele, Ereignisse, Daten MÜSSEN aus '{$province}' sein\n   - Zitiere Personen/Firmen/Institutionen aus '{$province}'\n   - Vergleiche mit anderen Regionen, aber konzentriere dich NUR auf '{$province}'\n   - Schreibe NICHT über andere Regionen als Hauptthema\n   - Wenn Informationen nicht '{$province}' betreffen, verwende sie NICHT!\n\n",
                 'req3' => "3. SCHLÜSSELWÖRTER: Füge organisch folgende Begriffe ein: %s (verwende Synonyme und verwandte Begriffe)\n",
                 'req4' => "4. PREMIUM-STRUKTUR:\n   - Titel (H1): Konkret, ansprechend, kein Clickbait\n   - Lead (2-3 Absätze): Einleitung mit Schlüsselinformationen\n   - 4-6 inhaltliche Abschnitte (H2): Jeder mit Ursache-Wirkungs-Analyse\n   - Unterabschnitte (H3) wo nötig: Für mehr Details\n   - Zusammenfassung mit Prognosen oder Empfehlungen\n\n",
-                'req5' => "5. INHALTLICHER WERT:\n   - Verwende KONKRETE Zahlen, Daten, Statistiken (z.B. Beträge, Prozente, Termine)\n   - Zitiere Experten oder Institutionsvertreter (echte Namen und Positionen)\n   - Analysiere URSACHEN und FOLGEN von Ereignissen\n   - Füge historischen KONTEXT oder Vergleiche mit anderen Regionen hinzu\n   - Präsentiere verschiedene PERSPEKTIVEN (Behörden, Bürger, Experten)\n\n",
+                'req5' => "5. INHALTLICHER WERT UND LOKALE ELEMENTE:\n   - Verwende KONKRETE Zahlen, Daten, Statistiken (z.B. Beträge, Prozente, Termine)\n   - Zitiere LOKALE Experten, Politiker, Prominente aus '{$province}' (echte Namen und Positionen)\n   - Nenne konkrete STÄDTE, GEMEINDEN aus '{$province}'\n   - Erwähne LOKALE POLITIKER (Ministerpräsident, Landrat, Bürgermeister, Räte)\n   - Erwähne LOKALE VERANSTALTUNGEN, Festivals, Feierlichkeiten in '{$province}'\n   - Erwähne LOKALE UNTERNEHMEN, Investitionen, Projekte in '{$province}'\n   - Analysiere URSACHEN und FOLGEN von Ereignissen für Bürger von '{$province}'\n   - Füge historischen KONTEXT oder Vergleiche mit anderen Regionen hinzu\n   - Präsentiere verschiedene PERSPEKTIVEN (lokale Behörden, Bürger, regionale Experten)\n\n",
                 'req6' => "6. SPRACHLICHE QUALITÄT:\n   - Verwende REICHHALTIGES Vokabular (Synonyme, Fachbegriffe)\n   - Vermeide Wiederholungen - jeder Absatz bietet neuen Wert\n   - Nutze präzise Formulierungen statt Allgemeinplätze\n   - Verbinde Fakten mit Erzählung (Storytelling mit Daten)\n\n",
                 'req7' => "7. STORYTELLING:\n   - Beginne mit konkretem Beispiel, Situation oder Ereignis\n   - Zeige Auswirkungen auf das Leben der Bürger (humanisiere den Inhalt)\n   - Füge Mikrogeschichten oder Fallstudien hinzu\n   - Schließe mit Zukunftsvision oder Schlussfolgerungen\n\n",
-                'req8' => "8. SEO- UND ADSENSE-OPTIMIERUNG:\n   - Natürliche Verteilung der Schlüsselwörter (nicht erzwingen)\n   - Längere Absätze (3-5 Sätze) für bessere Lesbarkeit\n   - Verwende rhetorische Fragen für Lesereinbindung\n   - Füge interne Verlinkungen hinzu (wo angemessen)\n   - KEIN Clickbait, keine Sensationen, keine Fake News\n\n",
-                'req9' => "9. EINZIGARTIGE ELEMENTE:\n   - Deine eigene Analyse und Interpretation der Fakten\n   - Interregionale oder internationale Vergleiche\n   - Prognosen oder datenbasierte Empfehlungen\n   - Aufzeigen von Implikationen für verschiedene Gruppen (Bürger, Unternehmen, Verwaltung)\n\n",
+                'req8' => "8. SEO- UND AI-SEARCH-OPTIMIERUNG (ChatGPT, Gemini, Perplexity):\n   - Natürliche Verteilung der Schlüsselwörter (nicht erzwingen)\n   - Längere Absätze (3-5 Sätze) für bessere Lesbarkeit\n   - Verwende rhetorische Fragen für Lesereinbindung\n   - Strukturiere Informationen - verwende Listen (ul/ol) wo möglich\n   - Füge KONKRETE FAKTEN hinzu, die AI zitieren kann\n   - Verwende klare, eindeutige Aussagen (für AI-Faktenprüfung)\n   - Füge vollständige Namen hinzu (keine Abkürzungen) - z.B. '{$province}' vollständig\n   - KEIN Clickbait, keine Sensationen, keine Fake News\n\n",
+                'req9' => "9. LOKALE SCHLÜSSELWÖRTER (für lokale Positionierung):\n   - Verwende Namen: Städte, Gemeinden, Landkreise aus '{$province}'\n   - Erwähne: 'Nachrichten {$province}', 'Ereignisse {$province}'\n   - Füge hinzu: 'Kommunalverwaltung {$province}', 'Investitionen in {$province}'\n   - Falls es lokale Klatsch/Prominente gibt - erwähne sie\n   - Verwende lokale geografische Bezeichnungen (Flüsse, Berge, Bezirke)\n   - Für besseres AI Search: verwende vollständige Fragephrasen (Wer? Was? Wo? Wann? Warum?)\n\n",
+                'req10' => "10. EINZIGARTIGE ELEMENTE:\n   - Deine eigene Analyse und Interpretation der Fakten\n   - Interregionale oder internationale Vergleiche\n   - Prognosen oder datenbasierte Empfehlungen\n   - Aufzeigen von Implikationen für verschiedene Gruppen (Bürger, Unternehmen, lokale Verwaltung)\n\n",
                 'format' => "Gib den Artikel im HTML-Format mit entsprechenden Tags zurück (h1, h2, h3, p, strong, em). Verwende <strong> für Schlüsselinformationen und <em> für Akzente."
             ),
             'en' => array(
@@ -234,11 +357,12 @@ class AICP_OpenAI_API {
                 'req2' => "2. LOCALIZATION - MOST IMPORTANT!!:\n   - The article MUST be EXCLUSIVELY about '{$province}'\n   - The name '{$province}' must appear 5-7 times in the text\n   - All examples, events, data MUST be from '{$province}'\n   - Quote people/companies/institutions from '{$province}'\n   - Compare with other regions, but focus ONLY on '{$province}'\n   - Do NOT write about other regions as the main topic\n   - If information doesn't concern '{$province}', do NOT use it!\n\n",
                 'req3' => "3. KEYWORDS: Organically incorporate the following phrases: %s (use synonyms and related terms)\n",
                 'req4' => "4. PREMIUM STRUCTURE:\n   - Title (H1): Specific, engaging, no clickbait\n   - Lead (2-3 paragraphs): Introduction with key information\n   - 4-6 substantive sections (H2): Each with cause-effect analysis\n   - Subsections (H3) where needed: For greater detail\n   - Summary with predictions or recommendations\n\n",
-                'req5' => "5. SUBSTANTIVE VALUE:\n   - Use SPECIFIC numbers, data, statistics (e.g., amounts, percentages, dates)\n   - Quote experts or institutional representatives (real names and positions)\n   - Analyze CAUSES and EFFECTS of events\n   - Add historical CONTEXT or comparisons with other regions\n   - Present different PERSPECTIVES (authorities, residents, experts)\n\n",
+                'req5' => "5. SUBSTANTIVE VALUE AND LOCAL ELEMENTS:\n   - Use SPECIFIC numbers, data, statistics (e.g., amounts, percentages, dates)\n   - Quote LOCAL experts, politicians, celebrities from '{$province}' (real names and positions)\n   - Name specific CITIES, MUNICIPALITIES from '{$province}'\n   - Mention LOCAL POLITICIANS (marshal, voivode, mayors, councilors)\n   - Mention LOCAL EVENTS, festivals, ceremonies in '{$province}'\n   - Mention LOCAL COMPANIES, investments, projects in '{$province}'\n   - Analyze CAUSES and EFFECTS of events for residents of '{$province}'\n   - Add historical CONTEXT or comparisons with other regions\n   - Present different PERSPECTIVES (local authorities, residents, regional experts)\n\n",
                 'req6' => "6. LANGUAGE QUALITY:\n   - Use RICH vocabulary (synonyms, professional terms)\n   - Avoid repetition - each paragraph adds new value\n   - Use precise expressions instead of generalities\n   - Combine facts with narrative (storytelling with data)\n\n",
                 'req7' => "7. STORYTELLING:\n   - Start with a concrete example, situation, or event\n   - Show impact on residents' lives (humanize content)\n   - Add micro-stories or case studies\n   - End with a vision of the future or conclusions\n\n",
-                'req8' => "8. SEO AND ADSENSE OPTIMIZATION:\n   - Natural distribution of keywords (don't force it)\n   - Longer paragraphs (3-5 sentences) for better readability\n   - Use rhetorical questions to engage readers\n   - Add internal linking (where appropriate)\n   - ZERO clickbait, sensationalism, fake news\n\n",
-                'req9' => "9. UNIQUE ELEMENTS:\n   - Your own analysis and interpretation of facts\n   - Inter-regional or international comparisons\n   - Forecasts or data-driven recommendations\n   - Indication of implications for different groups (residents, businesses, government)\n\n",
+                'req8' => "8. SEO AND AI SEARCH OPTIMIZATION (ChatGPT, Gemini, Perplexity):\n   - Natural distribution of keywords (don't force it)\n   - Longer paragraphs (3-5 sentences) for better readability\n   - Use rhetorical questions to engage readers\n   - Structure information - use lists (ul/ol) where possible\n   - Add SPECIFIC FACTS that AI can quote\n   - Use clear, unambiguous statements (for AI fact-checking)\n   - Add full names (not abbreviations) - e.g., 'Masovian Voivodeship' instead of 'Masov. Voiv.'\n   - ZERO clickbait, sensationalism, fake news\n\n",
+                'req9' => "9. LOCAL KEYWORDS (for local positioning):\n   - Use names: cities, municipalities, counties from '{$province}'\n   - Mention: 'news {$province}', 'events {$province}'\n   - Add: 'local government {$province}', 'investments in {$province}'\n   - If there are local gossip/celebrities - mention them\n   - Use local geographical terms (rivers, mountains, districts)\n   - For better AI Search: use full question phrases (Who? What? Where? When? Why?)\n\n",
+                'req10' => "10. UNIQUE ELEMENTS:\n   - Your own analysis and interpretation of facts\n   - Inter-regional or international comparisons\n   - Forecasts or data-driven recommendations\n   - Indication of implications for different groups (residents, businesses, local government)\n\n",
                 'format' => "Return the article in HTML format with appropriate tags (h1, h2, h3, p, strong, em). Use <strong> for key information and <em> for emphasis."
             ),
             'uk' => array(
@@ -249,11 +373,12 @@ class AICP_OpenAI_API {
                 'req2' => "2. ЛОКАЛІЗАЦІЯ - НАЙВАЖЛИВІШЕ!!:\n   - Стаття ПОВИННА стосуватися ВИКЛЮЧНО '{$province}'\n   - Назва '{$province}' повинна з'явитися 5-7 разів у тексті\n   - Всі приклади, події, дані ПОВИННІ бути з '{$province}'\n   - Цитуй людей/компанії/установи з '{$province}'\n   - Порівнюй з іншими регіонами, але зосереджуйся ТІЛЬКИ на '{$province}'\n   - НЕ пиши про інші регіони як основну тему\n   - Якщо інформація не стосується '{$province}', НЕ використовуй її!\n\n",
                 'req3' => "3. КЛЮЧОВІ СЛОВА: Органічно вплети наступні фрази: %s (використовуй синоніми та споріднені терміни)\n",
                 'req4' => "4. ПРЕМІУМ-СТРУКТУРА:\n   - Заголовок (H1): Конкретний, цікавий, без клікбейту\n   - Лід (2-3 абзаци): Вступ з ключовою інформацією\n   - 4-6 змістовних розділів (H2): Кожен з аналізом причин-наслідків\n   - Підрозділи (H3) де потрібно: Для більшої деталізації\n   - Підсумок з прогнозами або рекомендаціями\n\n",
-                'req5' => "5. ЗМІСТОВНА ЦІННІСТЬ:\n   - Використовуй КОНКРЕТНІ цифри, дані, статистику (напр., суми, відсотки, дати)\n   - Цитуй експертів або представників установ (справжні імена та посади)\n   - Аналізуй ПРИЧИНИ та НАСЛІДКИ подій\n   - Додай історичний КОНТЕКСТ або порівняння з іншими регіонами\n   - Представ різні ПЕРСПЕКТИВИ (влада, мешканці, експерти)\n\n",
+                'req5' => "5. ЗМІСТОВНА ЦІННІСТЬ ТА ЛОКАЛЬНІ ЕЛЕМЕНТИ:\n   - Використовуй КОНКРЕТНІ цифри, дані, статистику (напр., суми, відсотки, дати)\n   - Цитуй ЛОКАЛЬНИХ експертів, політиків, селебріті з '{$province}' (справжні імена та посади)\n   - Називай конкретні МІСТА, ГРОМАДИ з '{$province}'\n   - Згадуй ЛОКАЛЬНИХ ПОЛІТИКІВ (голова області, губернатор, мери, депутати)\n   - Згадуй ЛОКАЛЬНІ ПОДІЇ, фестивалі, урочистості в '{$province}'\n   - Згадуй ЛОКАЛЬНІ КОМПАНІЇ, інвестиції, проєкти в '{$province}'\n   - Аналізуй ПРИЧИНИ та НАСЛІДКИ подій для мешканців '{$province}'\n   - Додай історичний КОНТЕКСТ або порівняння з іншими регіонами\n   - Представ різні ПЕРСПЕКТИВИ (місцева влада, мешканці, регіональні експерти)\n\n",
                 'req6' => "6. МОВНА ЯКІСТЬ:\n   - Використовуй БАГАТИЙ словниковий запас (синоніми, професійні терміни)\n   - Уникай повторень - кожен абзац додає нову цінність\n   - Застосовуй точні формулювання замість загальних фраз\n   - Поєднуй факти з наративом (сторітелінг з даними)\n\n",
                 'req7' => "7. СТОРІТЕЛІНГ:\n   - Почни з конкретного прикладу, ситуації або події\n   - Покажи вплив на життя мешканців (гуманізуй контент)\n   - Додай мікроісторії або кейс-стаді\n   - Завершуй баченням майбутнього або висновками\n\n",
-                'req8' => "8. SEO ТА ADSENSE ОПТИМІЗАЦІЯ:\n   - Природний розподіл ключових слів (не форсуй)\n   - Довші абзаци (3-5 речень) для кращої читабельності\n   - Використовуй риторичні питання для залучення читачів\n   - Додай внутрішні посилання (де доречно)\n   - НУЛЬ клікбейту, сенсацій, фейкових новин\n\n",
-                'req9' => "9. УНІКАЛЬНІ ЕЛЕМЕНТИ:\n   - Твій власний аналіз та інтерпретація фактів\n   - Міжрегіональні або міжнародні порівняння\n   - Прогнози або рекомендації на основі даних\n   - Вказівка на наслідки для різних груп (мешканці, бізнес, влада)\n\n",
+                'req8' => "8. SEO ТА AI SEARCH ОПТИМІЗАЦІЯ (ChatGPT, Gemini, Perplexity):\n   - Природний розподіл ключових слів (не форсуй)\n   - Довші абзаци (3-5 речень) для кращої читабельності\n   - Використовуй риторичні питання для залучення читачів\n   - Структуруй інформацію - використовуй списки (ul/ol) де можливо\n   - Додай КОНКРЕТНІ ФАКТИ які AI зможе процитувати\n   - Використовуй чіткі, однозначні твердження (для AI перевірки фактів)\n   - Додай повні назви (не скорочення) - напр., '{$province}' повністю\n   - НУЛЬ клікбейту, сенсацій, фейкових новин\n\n",
+                'req9' => "9. ЛОКАЛЬНІ КЛЮЧОВІ СЛОВА (для локального позиціонування):\n   - Використовуй назви: міста, громади, райони з '{$province}'\n   - Згадуй: 'новини {$province}', 'події {$province}'\n   - Додай: 'місцева влада {$province}', 'інвестиції в {$province}'\n   - Якщо є місцеві плітки/селебріті - згадай їх\n   - Використовуй локальні географічні назви (річки, гори, райони)\n   - Для кращого AI Search: використовуй повні питальні фрази (Хто? Що? Де? Коли? Чому?)\n\n",
+                'req10' => "10. УНІКАЛЬНІ ЕЛЕМЕНТИ:\n   - Твій власний аналіз та інтерпретація фактів\n   - Міжрегіональні або міжнародні порівняння\n   - Прогнози або рекомендації на основі даних\n   - Вказівка на наслідки для різних груп (мешканці, бізнес, місцева влада)\n\n",
                 'format' => "Поверни статтю у форматі HTML з відповідними тегами (h1, h2, h3, p, strong, em). Використовуй <strong> для ключової інформації та <em> для акцентів."
             )
         );
@@ -277,6 +402,11 @@ class AICP_OpenAI_API {
         $prompt .= $template['req7'];
         $prompt .= $template['req8'];
         $prompt .= $template['req9'];
+        
+        if (isset($template['req10'])) {
+            $prompt .= $template['req10'];
+        }
+        
         $prompt .= $template['format'];
         
         return $prompt;

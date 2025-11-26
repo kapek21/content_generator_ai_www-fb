@@ -3,7 +3,8 @@
 💎 **PREMIUM CONTENT** - Automatyczne generowanie i publikowanie artykułów **WYSOKIEJ JAKOŚCI** wykorzystując sztuczną inteligencję (Perplexity, OpenAI) z integracją Facebook. 
 
 🌍 Obsługa 4 języków: Polski 🇵🇱, Niemiecki 🇩🇪, Angielski 🇬🇧, Ukraiński 🇺🇦  
-⭐ **Zoptymalizowane dla Google AdSense** - artykuły premium o wysokiej wartości merytorycznej
+⭐ **Zoptymalizowane dla Google AdSense** - artykuły premium o wysokiej wartości merytorycznej  
+🤖 **AI Search Ready** - pełna optymalizacja pod ChatGPT, Gemini, Perplexity (Schema.org, ALT, meta descriptions)
 
 ## 📋 Spis treści
 
@@ -39,12 +40,19 @@ AI Content Publisher to zaawansowana wtyczka WordPress, która automatyzuje proc
   - Bogate słownictwo i storytelling
   - Unikalne perspektywy i prognozy
   - Zero clickbaitu - 100% wartościowa treść
+- 🤖 **AI Search Optimization (v1.6.0)** - Pełna optymalizacja pod wyszukiwarki AI:
+  - **Schema.org JSON-LD** - structured data (NewsArticle + WebPage + Breadcrumb)
+  - **Automatyczne ALT dla obrazków** - SEO + AI friendly opisy (100-150 znaków)
+  - **Meta descriptions** - zoptymalizowane pod Google i AI (150-160 znaków)
+  - **Lokalne słowa kluczowe** - wspominanie polityków, celebrytów, miast, wydarzeń
+  - **AI fact-checking ready** - jasne stwierdzenia, strukturyzowane listy, pełne nazwy
+  - Wsparcie dla Yoast SEO i Rank Math
 - ✅ **Automatyczne wyszukiwanie newsów** - Perplexity przeszukuje internet w poszukiwaniu najnowszych informacji
 - ✅ **Inteligentne generowanie treści** - GPT-4 tworzy artykuły analityczne klasy premium
 - ✅ **Generowanie obrazów AI** - DALL-E 3 tworzy unikalne obrazy dla każdego artykułu
 - ✅ **Publikacja na Facebook** - automatyczne posty ze zdjęciami i linkami
 - 🌍 **Wsparcie wielu języków** - Polski, Niemiecki, Angielski, Ukraiński (wszystkie prompty AI dostosowane)
-- ✅ **Optymalizacja SEO** - naturalne zagęszczenie słów kluczowych
+- ✅ **Optymalizacja SEO & AI Search** - naturalne zagęszczenie słów kluczowych + structured data
 - ✅ **Wykrywanie województwa/regionu** - automatyczne rozpoznawanie regionu z nazwy domeny
 - ✅ **Konfigurowana częstotliwość** - indywidualna częstotliwość publikacji dla każdej kategorii (codziennie, co 2 dni, co tydzień, etc.)
 - ✅ **Harmonogram automatyczny** - inteligentne generowanie według ustawionej częstotliwości

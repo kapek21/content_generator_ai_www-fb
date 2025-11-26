@@ -88,8 +88,16 @@ class AICP_Content_Generator {
         $result['steps'][] = 'Generowanie obrazu przez DALL-E...';
         $image_url = $this->openai->generate_image($article_title, $category->name);
         
+        // Krok 3a: Wygeneruj opis ALT dla obrazka (SEO + AI Search)
+        $result['steps'][] = 'Generowanie opisu ALT dla SEO...';
+        $image_alt = $this->openai->generate_image_alt_text($article_title, $category->name, $this->province, $this->language);
+        
+        // Krok 3b: Wygeneruj meta description
+        $result['steps'][] = 'Generowanie meta description...';
+        $meta_description = $this->openai->generate_meta_description($article_excerpt, $this->province, $category->name, $this->language);
+        
         // Pobierz i zapisz obraz w media library
-        $image_id = $this->download_and_save_image($image_url, $article_title);
+        $image_id = $this->download_and_save_image($image_url, $article_title, $image_alt);
         
         // Krok 4: Utwórz wpis w WordPress
         $result['steps'][] = 'Tworzenie wpisu w WordPress...';
@@ -97,7 +105,8 @@ class AICP_Content_Generator {
             $article_title,
             $article_html,
             $category_id,
-            $image_id
+            $image_id,
+            $meta_description
         );
         
         $result['post_id'] = $post_id;
@@ -179,7 +188,7 @@ class AICP_Content_Generator {
     /**
      * Pobiera obraz z URL i zapisuje w media library
      */
-    private function download_and_save_image($image_url, $title) {
+    private function download_and_save_image($image_url, $title, $alt_text = '') {
         require_once(ABSPATH . 'wp-admin/includes/media.php');
         require_once(ABSPATH . 'wp-admin/includes/file.php');
         require_once(ABSPATH . 'wp-admin/includes/image.php');
@@ -209,13 +218,18 @@ class AICP_Content_Generator {
             throw new Exception('Błąd zapisywania obrazu: ' . $image_id->get_error_message());
         }
         
+        // Dodaj ALT text do obrazka (SEO + AI Search)
+        if (!empty($alt_text)) {
+            update_post_meta($image_id, '_wp_attachment_image_alt', $alt_text);
+        }
+        
         return $image_id;
     }
     
     /**
      * Tworzy wpis w WordPress
      */
-    private function create_wordpress_post($title, $content, $category_id, $featured_image_id) {
+    private function create_wordpress_post($title, $content, $category_id, $featured_image_id, $meta_description = '') {
         // Usuń tag H1 z contentu (będzie użyty jako tytuł)
         $content = preg_replace('/<h1[^>]*>.*?<\/h1>/i', '', $content);
         
@@ -225,7 +239,8 @@ class AICP_Content_Generator {
             'post_status' => 'publish',
             'post_author' => get_current_user_id() ?: 1,
             'post_category' => array($category_id),
-            'post_type' => 'post'
+            'post_type' => 'post',
+            'post_excerpt' => $meta_description // Używamy meta description jako excerpt
         );
         
         $post_id = wp_insert_post($post_data, true);
@@ -244,7 +259,125 @@ class AICP_Content_Generator {
         update_post_meta($post_id, '_aicp_generation_date', current_time('mysql'));
         update_post_meta($post_id, '_aicp_province', $this->province);
         
+        // Meta description dla SEO (Yoast, Rank Math, etc.)
+        if (!empty($meta_description)) {
+            update_post_meta($post_id, '_yoast_wpseo_metadesc', $meta_description);
+            update_post_meta($post_id, 'rank_math_description', $meta_description);
+            update_post_meta($post_id, '_aicp_meta_description', $meta_description);
+        }
+        
+        // Dodaj Schema.org JSON-LD dla AI Search
+        $this->add_schema_org_data($post_id, $title, $meta_description, $featured_image_id);
+        
         return $post_id;
+    }
+    
+    /**
+     * Dodaje Schema.org JSON-LD do wpisu (dla AI Search - ChatGPT, Gemini, Perplexity)
+     */
+    private function add_schema_org_data($post_id, $title, $description, $image_id) {
+        $post_url = get_permalink($post_id);
+        $post_date = get_the_date('c', $post_id);
+        $post_modified = get_the_modified_date('c', $post_id);
+        $site_name = get_bloginfo('name');
+        $site_url = get_site_url();
+        
+        // Pobierz URL obrazka
+        $image_url = '';
+        if ($image_id) {
+            $image_data = wp_get_attachment_image_src($image_id, 'full');
+            if ($image_data) {
+                $image_url = $image_data[0];
+            }
+        }
+        
+        // Buduj schema.org JSON-LD (Article + LocalBusiness)
+        $schema = array(
+            '@context' => 'https://schema.org',
+            '@graph' => array(
+                // Article Schema
+                array(
+                    '@type' => 'NewsArticle',
+                    '@id' => $post_url . '#article',
+                    'headline' => $title,
+                    'description' => $description,
+                    'image' => $image_url,
+                    'datePublished' => $post_date,
+                    'dateModified' => $post_modified,
+                    'author' => array(
+                        '@type' => 'Organization',
+                        'name' => $site_name,
+                        'url' => $site_url
+                    ),
+                    'publisher' => array(
+                        '@type' => 'Organization',
+                        'name' => $site_name,
+                        'url' => $site_url,
+                        'logo' => array(
+                            '@type' => 'ImageObject',
+                            'url' => get_site_icon_url()
+                        )
+                    ),
+                    'mainEntityOfPage' => array(
+                        '@type' => 'WebPage',
+                        '@id' => $post_url
+                    ),
+                    'articleSection' => 'News',
+                    'inLanguage' => $this->language,
+                    'about' => array(
+                        '@type' => 'Place',
+                        'name' => $this->province,
+                        'address' => array(
+                            '@type' => 'PostalAddress',
+                            'addressRegion' => $this->province
+                        )
+                    )
+                ),
+                // WebPage Schema
+                array(
+                    '@type' => 'WebPage',
+                    '@id' => $post_url,
+                    'url' => $post_url,
+                    'name' => $title,
+                    'description' => $description,
+                    'isPartOf' => array(
+                        '@type' => 'WebSite',
+                        'name' => $site_name,
+                        'url' => $site_url
+                    ),
+                    'primaryImageOfPage' => array(
+                        '@type' => 'ImageObject',
+                        'url' => $image_url
+                    ),
+                    'breadcrumb' => array(
+                        '@type' => 'BreadcrumbList',
+                        'itemListElement' => array(
+                            array(
+                                '@type' => 'ListItem',
+                                'position' => 1,
+                                'name' => 'Home',
+                                'item' => $site_url
+                            ),
+                            array(
+                                '@type' => 'ListItem',
+                                'position' => 2,
+                                'name' => $this->province,
+                                'item' => $post_url
+                            ),
+                            array(
+                                '@type' => 'ListItem',
+                                'position' => 3,
+                                'name' => $title,
+                                'item' => $post_url
+                            )
+                        )
+                    )
+                )
+            )
+        );
+        
+        // Zapisz jako meta field (zostanie wstawiony w <head> przez hook)
+        update_post_meta($post_id, '_aicp_schema_org', wp_json_encode($schema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
     }
     
     /**
