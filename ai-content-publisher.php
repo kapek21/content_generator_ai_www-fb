@@ -3,7 +3,7 @@
  * Plugin Name: AI Content Publisher
  * Plugin URI: https://twojadomena.pl
  * Description: Automatyczne generowanie i publikowanie PREMIUM artykułów WYŁĄCZNIE o wybranym województwie/regionie. Wsparcie dla wielu języków (PL, DE, EN, UK). Zoptymalizowane dla Google AdSense.
- * Version: 1.4.0
+ * Version: 1.5.0
  * Author: Twoja Nazwa
  * Author URI: https://twojadomena.pl
  * License: GPL2
@@ -16,7 +16,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Definicje stałych
-define('AICP_VERSION', '1.4.0');
+define('AICP_VERSION', '1.5.0');
 define('AICP_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('AICP_PLUGIN_URL', plugin_dir_url(__FILE__));
 
@@ -44,6 +44,7 @@ class AI_Content_Publisher {
         add_action('wp_ajax_aicp_generate_content', array($this, 'ajax_generate_content'));
         add_action('wp_ajax_aicp_test_connection', array($this, 'ajax_test_connection'));
         add_action('wp_ajax_aicp_save_category_frequency', array($this, 'ajax_save_category_frequency'));
+        add_action('wp_ajax_aicp_run_cron_manually', array($this, 'ajax_run_cron_manually'));
         
         // Cron dla automatycznego generowania
         add_action('aicp_auto_generate_event', array($this, 'auto_generate_content'));
@@ -243,7 +244,14 @@ class AI_Content_Publisher {
     }
     
     public function auto_generate_content() {
+        // Zapisz czas uruchomienia
+        update_option('aicp_last_cron_run', current_time('mysql'));
+        
+        // Loguj uruchomienie
+        error_log('AICP Cron: Uruchomiono auto_generate_content()');
+        
         if (!get_option('aicp_auto_generate_enabled')) {
+            error_log('AICP Cron: Automatyczne generowanie jest WYŁĄCZONE');
             return;
         }
         
@@ -255,26 +263,40 @@ class AI_Content_Publisher {
             'hide_empty' => false
         ));
         
+        error_log('AICP Cron: Znaleziono ' . count($categories) . ' kategorii do sprawdzenia');
+        
+        $generated_count = 0;
+        $skipped_count = 0;
+        
         foreach ($categories as $category) {
             // Sprawdź, czy kategoria powinna być generowana dzisiaj
             if (!$this->should_generate_for_category($category->term_id)) {
+                $skipped_count++;
+                error_log('AICP Cron: Pominięto kategorię "' . $category->name . '" (ID: ' . $category->term_id . ') - nie nadszedł czas');
                 continue;
             }
             
             try {
+                error_log('AICP Cron: Generowanie dla kategorii "' . $category->name . '" (ID: ' . $category->term_id . ')');
                 $generator->generate_and_publish($category->term_id);
                 
                 // Zapisz log i aktualizuj ostatnią datę generowania
-                $this->log_generation($category->term_id, 'success');
+                $this->log_generation($category->term_id, 'success', 'Automatyczne generowanie przez cron');
                 $this->update_last_generated($category->term_id);
+                
+                $generated_count++;
+                error_log('AICP Cron: ✓ Sukces dla kategorii "' . $category->name . '"');
                 
                 // Odczekaj między generowaniem, aby nie przekroczyć limitów API
                 sleep(10);
             } catch (Exception $e) {
                 // Zapisz błąd
                 $this->log_generation($category->term_id, 'error', $e->getMessage());
+                error_log('AICP Cron: ✗ Błąd dla kategorii "' . $category->name . '": ' . $e->getMessage());
             }
         }
+        
+        error_log('AICP Cron: Zakończono. Wygenerowano: ' . $generated_count . ', Pominięto: ' . $skipped_count);
     }
     
     private function log_generation($category_id, $status, $message = '') {
@@ -360,6 +382,32 @@ class AI_Content_Publisher {
             'frequency' => $frequency,
             'message' => 'Częstotliwość zapisana'
         ));
+    }
+    
+    /**
+     * AJAX: Ręczne uruchomienie crona
+     */
+    public function ajax_run_cron_manually() {
+        check_ajax_referer('aicp_nonce', 'nonce');
+        
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error('Brak uprawnień');
+        }
+        
+        try {
+            // Uruchom funkcję auto_generate_content
+            ob_start();
+            $this->auto_generate_content();
+            $output = ob_get_clean();
+            
+            wp_send_json_success(array(
+                'message' => 'Cron uruchomiony pomyślnie',
+                'last_run' => get_option('aicp_last_cron_run'),
+                'output' => $output
+            ));
+        } catch (Exception $e) {
+            wp_send_json_error('Błąd uruchomienia crona: ' . $e->getMessage());
+        }
     }
     
     /**

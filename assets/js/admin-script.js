@@ -44,6 +44,56 @@
             });
         });
         
+        // Ręczne uruchomienie crona
+        $('#run-cron-manually').on('click', function() {
+            var $button = $(this);
+            var $results = $('#cron-run-results');
+            
+            if (!confirm('Czy na pewno chcesz uruchomić sprawdzenie TERAZ?\n\nSystem sprawdzi wszystkie kategorie i wygeneruje artykuły, które powinny być wygenerowane według częstotliwości.\n\nProces może zająć kilka minut.')) {
+                return;
+            }
+            
+            $button.prop('disabled', true).text('Uruchamianie...');
+            $results.html('<div class="notice notice-info"><p><span class="dashicons dashicons-update"></span> Uruchamianie automatycznego sprawdzania...</p></div>');
+            
+            $.ajax({
+                url: aicpAjax.ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'aicp_run_cron_manually',
+                    nonce: aicpAjax.nonce
+                },
+                timeout: 600000, // 10 minut timeout
+                success: function(response) {
+                    if (response.success) {
+                        var html = '<div class="notice notice-success"><p>';
+                        html += '<strong>✓ Cron uruchomiony pomyślnie!</strong><br>';
+                        html += 'Czas uruchomienia: ' + response.data.last_run + '<br>';
+                        html += '<em>Sprawdź zakładkę Historia aby zobaczyć szczegóły wygenerowanych artykułów.</em>';
+                        html += '</p></div>';
+                        $results.html(html);
+                        
+                        // Odśwież stronę po 3 sekundach
+                        setTimeout(function() {
+                            location.reload();
+                        }, 3000);
+                    } else {
+                        $results.html('<div class="notice notice-error"><p><strong>Błąd:</strong> ' + response.data + '</p></div>');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    var errorMsg = 'Błąd połączenia z serwerem';
+                    if (status === 'timeout') {
+                        errorMsg = 'Timeout - proces trwa zbyt długo. Sprawdź logi serwera i historię publikacji.';
+                    }
+                    $results.html('<div class="notice notice-error"><p><strong>Błąd:</strong> ' + errorMsg + '</p></div>');
+                },
+                complete: function() {
+                    $button.prop('disabled', false).text('▶️ Uruchom sprawdzenie TERAZ (ręcznie)');
+                }
+            });
+        });
+        
         // Test wszystkich połączeń API
         $('#test-all-apis').on('click', function() {
             var $button = $(this);

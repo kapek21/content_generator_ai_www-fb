@@ -5,6 +5,48 @@ Wszystkie istotne zmiany w projekcie AI Content Publisher będą dokumentowane w
 Format oparty na [Keep a Changelog](https://keepachangelog.com/pl/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/lang/pl/).
 
+## [1.5.0] - 2025-11-01
+
+### Dodane
+- **🔧 Panel diagnostyczny WP-Cron** - sprawdź status automatycznego generowania
+  - Pokazuje czy automatyczne generowanie jest włączone
+  - Pokazuje ostatnie uruchomienie crona
+  - Pokazuje następne zaplanowane uruchomienie
+  - Sprawdza status WP-Cron (włączony/wyłączony w wp-config.php)
+  - **Przycisk do ręcznego uruchomienia crona** - testuj automatyczne generowanie natychmiast!
+  
+- **📊 Szczegółowe logowanie aktywności cron**
+  - Logowanie każdego uruchomienia do error_log
+  - Informacja o liczbie sprawdzonych kategorii
+  - Informacja o liczbie wygenerowanych artykułów
+  - Informacja o liczbie pominiętych kategorii (nie nadszedł czas)
+  - Szczegółowe logi błędów dla każdej kategorii
+  
+- **Zapisywanie czasu ostatniego uruchomienia crona** w opcjach WordPress
+
+### Zmienione
+- Funkcja `auto_generate_content()` teraz loguje szczegółowo każdy krok
+- Dodano liczniki wygenerowanych i pominiętych kategorii
+- Ulepszona diagnostyka problemów z automatycznym generowaniem
+
+### Naprawione
+- **Problem z automatycznym generowaniem** - dodano narzędzia diagnostyczne do debugowania
+
+### Jak używać:
+1. Przejdź do **AI Publisher → Panel Główny**
+2. Zobacz sekcję "🤖 Status Automatycznego Generowania"
+3. Sprawdź czy WP-Cron jest włączony
+4. Kliknij "**▶️ Uruchom sprawdzenie TERAZ**" aby przetestować automatyczne generowanie
+5. Sprawdź **Historia** aby zobaczyć czy artykuły zostały wygenerowane
+6. Sprawdź logi serwera (`wp-content/debug.log`) aby zobaczyć szczegóły działania crona
+
+### Troubleshooting:
+- **Jeśli WP-Cron jest wyłączony:** Musisz skonfigurować prawdziwy cron serwera
+- **Jeśli "Ostatnie uruchomienie" = "Nigdy":** WP-Cron się nie uruchamia - sprawdź czy odwiedzasz stronę regularnie
+- **Jeśli "Brak zaplanowanego uruchomienia":** Dezaktywuj i ponownie aktywuj wtyczkę
+
+---
+
 ## [1.4.0] - 2025-10-31
 
 ### Dodane

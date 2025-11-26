@@ -32,6 +32,78 @@ $categories = get_categories(array(
     </div>
     
     <div class="aicp-section">
+        <h2>🤖 Status Automatycznego Generowania</h2>
+        <?php
+        $auto_enabled = get_option('aicp_auto_generate_enabled', '0') === '1';
+        $auto_time = get_option('aicp_auto_generate_time', '08:00');
+        $last_cron_run = get_option('aicp_last_cron_run', '');
+        $next_scheduled = wp_next_scheduled('aicp_auto_generate_event');
+        ?>
+        
+        <table class="wp-list-table widefat fixed striped">
+            <tr>
+                <th style="width: 30%;">Automatyczne generowanie</th>
+                <td>
+                    <?php if ($auto_enabled): ?>
+                        <span style="color: green;">✓ Włączone</span>
+                    <?php else: ?>
+                        <span style="color: red;">✗ Wyłączone</span> 
+                        - <a href="<?php echo admin_url('admin.php?page=ai-content-publisher-settings'); ?>">Włącz w ustawieniach</a>
+                    <?php endif; ?>
+                </td>
+            </tr>
+            <tr>
+                <th>Godzina sprawdzania</th>
+                <td><?php echo esc_html($auto_time); ?> (WordPress Cron uruchamia się codziennie)</td>
+            </tr>
+            <tr>
+                <th>Ostatnie uruchomienie Cron</th>
+                <td>
+                    <?php if (!empty($last_cron_run)): ?>
+                        <?php echo esc_html(date('Y-m-d H:i:s', strtotime($last_cron_run))); ?>
+                    <?php else: ?>
+                        <em>Nigdy nie uruchomiony</em>
+                    <?php endif; ?>
+                </td>
+            </tr>
+            <tr>
+                <th>Następne zaplanowane uruchomienie</th>
+                <td>
+                    <?php if ($next_scheduled): ?>
+                        <?php echo esc_html(date('Y-m-d H:i:s', $next_scheduled)); ?>
+                        (za <?php echo human_time_diff($next_scheduled, current_time('timestamp')); ?>)
+                    <?php else: ?>
+                        <span style="color: orange;">⚠️ Brak zaplanowanego uruchomienia!</span>
+                        <p class="description">Spróbuj dezaktywować i ponownie aktywować wtyczkę.</p>
+                    <?php endif; ?>
+                </td>
+            </tr>
+            <tr>
+                <th>WP-Cron Status</th>
+                <td>
+                    <?php if (defined('DISABLE_WP_CRON') && DISABLE_WP_CRON): ?>
+                        <span style="color: orange;">⚠️ WP-Cron jest WYŁĄCZONY w wp-config.php</span>
+                        <p class="description">Musisz użyć prawdziwego crona serwera. Zobacz dokumentację.</p>
+                    <?php else: ?>
+                        <span style="color: green;">✓ WP-Cron jest WŁĄCZONY</span>
+                        <p class="description">Wymaga odwiedzin na stronie do uruchomienia.</p>
+                    <?php endif; ?>
+                </td>
+            </tr>
+        </table>
+        
+        <div style="margin-top: 20px;">
+            <button type="button" class="button button-primary" id="run-cron-manually">
+                ▶️ Uruchom sprawdzenie TERAZ (ręcznie)
+            </button>
+            <p class="description">
+                Kliknij aby natychmiast sprawdzić wszystkie kategorie i wygenerować artykuły które powinny być wygenerowane zgodnie z częstotliwością.
+            </p>
+            <div id="cron-run-results" style="margin-top: 15px;"></div>
+        </div>
+    </div>
+    
+    <div class="aicp-section">
         <h2>Test połączeń API</h2>
         <div class="aicp-api-tests">
             <button type="button" class="button button-secondary" id="test-all-apis">
